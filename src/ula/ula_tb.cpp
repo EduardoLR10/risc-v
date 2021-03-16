@@ -1,6 +1,4 @@
-#include "ula_tb.hpp"
-
-#define W (SIZE / 4)
+#include "ula/ula_tb.hpp"
 
 void ula_tb::aciona() {
     std::cout << "Testing ALU_ADD" << std::endl;

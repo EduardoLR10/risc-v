@@ -2,12 +2,11 @@
 #define __ULA_H__
 
 #include <systemc.h>
+#include "top/macros.hpp"
 
 enum OPCODE {
     ALU_ADD, ALU_SUB, ALU_AND, ALU_OR, ALU_XOR, ALU_SLL, ALU_SRL, ALU_SRA, ALU_SLT, ALU_SLTU, ALU_SGE, ALU_SGEU, ALU_SEQ, ALU_SNE,
 };
-
-#define SIZE 32
 
 SC_MODULE (ula) {
   sc_in<sc_uint<4>> opcode;

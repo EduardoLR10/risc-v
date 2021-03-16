@@ -3,7 +3,7 @@
 
 #include <systemc.h>
 
-#include "ula.hpp"
+#include "ula/ula.hpp"
 #include <iostream>
 #include <iomanip>
 

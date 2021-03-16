@@ -1,4 +1,4 @@
-#include "ula.hpp"
+#include "ula/ula.hpp"
 
 void ula::proc() {
 	sc_int<SIZE> a, b, z;

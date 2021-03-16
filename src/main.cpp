@@ -1,6 +1,5 @@
 #include <systemc.h>
-#include "sistema.hpp"
-#include "ula.hpp"
+#include "top/sistema.hpp"
 
 int sc_main (int argc, char* argv[]) {
 

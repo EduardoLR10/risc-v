@@ -2,14 +2,14 @@
 SYSTEMC_HOME=/usr/local/systemc-2.3.3
 
 # Program name
-EXECUTABLE=./main
+EXECUTABLE=./riscv
 
 # Definitions folder
 IDIR=./include
 # Sources folder
 SDIR=./src
 # Where to put the objs
-ODIR=$(SDIR)/obj
+ODIR=./obj
 
 # Compiler/linker
 CC=g++
@@ -24,29 +24,31 @@ LIBS=-lm
 
 # All definitions sources
 # NOTE: Update when adding .h files
-DEPS != ls $(IDIR)/*.$(DEF_EXT)
+DEPS != find $(IDIR)/ -name *.$(DEF_EXT)
 
 # All compiled sources
 # NOTE: Update when adding .cpp files
-_OBJ != ls $(SDIR)/*.$(SRC_EXT) | sed -e 's/.$(SRC_EXT)/.o/g'
+_OBJ != find $(SDIR)/ -name *.$(SRC_EXT) | sed -e 's/.$(SRC_EXT)/.o/g'
 OBJ = $(patsubst $(SDIR)/%,$(ODIR)/%,$(_OBJ))
+
+_FOLDERS != find $(SDIR)/ -name *.$(SRC_EXT) | cut -d "/" -f 3 | sed -e '/.cpp/d' | uniq
+FOLDERS = $(patsubst %,$(ODIR)/%,$(_FOLDERS))
 
 # ================================= TARGETS ================================== #
 
 # Creates executable (linking)
 $(EXECUTABLE): $(OBJ)
 	$(CC) -o $@ $^ $(LIBS) $(CFLAGS)
-
 # Creates objs for the executable
 $(ODIR)/%.o: $(SDIR)/%.$(SRC_EXT) $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 # Asks for a obj folder if needed
 # the '|' tells to ignore the folder timestamp
-$(OBJ): | $(ODIR)
+$(OBJ): | $(ODIR) $(FOLDERS)
 
 # Creates obj folder wheen needed
-$(ODIR):
+$(ODIR) $(FOLDERS):
 	mkdir -p $@
 
 # Compiles all files
