@@ -1,9 +1,9 @@
 #include <systemc.h>
-#include "top/sistema.hpp"
+#include "top/topGENIMM32.hpp"
 
 int sc_main (int argc, char* argv[]) {
 
-    sistema s("sistema");
+    topGENIMM32 t("imediatos");
 
     sc_start();
 

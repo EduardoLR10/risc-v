@@ -2,10 +2,9 @@
 #define __ADDER_TB
 
 #include <systemc.h>
-
-#include "adder/adder.hpp"
 #include <iostream>
 #include <iomanip>
+#include "top/macros.hpp"
 
 SC_MODULE (adder_tb) {
     sc_out<sc_int<SIZE>> A, B;
