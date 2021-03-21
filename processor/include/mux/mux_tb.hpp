@@ -9,7 +9,7 @@
 template <int N>
 SC_MODULE (mux_tb) {
     sc_vector<sc_out<sc_int<SIZE>>> inputs{"inputs", N};
-    sc_out<sc_bv<N - 1>> sel;
+    sc_out<int> sel;
     sc_in<sc_int<SIZE>> Z;   
 
     void aciona();
@@ -27,7 +27,7 @@ void mux_tb<N>::aciona() {
     if(N == 3){
         inputs.at(2) = 0x0f0f0f0f;
     }
-    sel = 1;
+    sel = 2;
     wait(1, SC_NS);
     std::cout << "Mux 0 = " << std::setw(W) << std::hex << inputs.at(0).read() << std::endl;
     std::cout << "Mux 1 = " << std::setw(W) << inputs.at(1).read() << std::endl;

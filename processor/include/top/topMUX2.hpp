@@ -8,7 +8,7 @@ SC_MODULE ( topMUX2 ) {
     mux<2> MUX;
 
     sc_vector<sc_signal<sc_int<SIZE>>> inputs{"inputs", 2};
-    sc_signal<sc_bv<1>> sel;
+    sc_signal<int> sel;
     sc_signal<sc_int<SIZE>> Z;
 
     SC_CTOR ( topMUX2 ) : MUX_tb("MUX_tb"), MUX("MUX") {
