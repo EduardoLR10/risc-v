@@ -1,5 +1,5 @@
-#ifndef __GENIMM32_TB
-#define __GENIMM32_TB
+#ifndef __GENIMM32_TB__
+#define __GENIMM32_TB__
 
 #include <systemc.h>
 #include <iostream>

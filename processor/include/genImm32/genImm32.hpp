@@ -1,5 +1,5 @@
-#ifndef __GENIMM__
-#define __GENIMM__
+#ifndef __GENIMM32__
+#define __GENIMM32__
 
 #include <systemc.h>
 #include "top/macros.hpp"
