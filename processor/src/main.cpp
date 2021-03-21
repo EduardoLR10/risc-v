@@ -1,9 +1,9 @@
 #include <systemc.h>
-#include "top/topGENIMM32.hpp"
+#include "top/topMUX2.hpp"
 
 int sc_main (int argc, char* argv[]) {
 
-    topGENIMM32 t("imediatos");
+    topMUX2 m("mux2");
 
     sc_start();
 

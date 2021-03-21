@@ -178,12 +178,12 @@ void dump_mem(int start_byte, int end_byte, char format) {
 	switch (format) {
 		case 'h':
 		case 'H':
-			for (uint32_t i = start_byte; i <= (uint32_t)(end_byte); i+=4)
+			for (uint32_t i = start_byte; i <= (int)(end_byte); i+=4)
 				printf("%x \t%x\n", i, lw(i, 0));
 			break;
 		case 'd':
 		case 'D':
-			for (int i = start_byte; i <= (uint32_t)(end_byte); i+=4)
+			for (int i = start_byte; i <= (int)(end_byte); i+=4)
 				printf("%x \t%d\n", i, lw(i, 0));
 			break;
 		default:
