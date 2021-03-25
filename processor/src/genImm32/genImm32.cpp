@@ -16,6 +16,7 @@ void genImm32::proc() {
         case SB_type:
             im = ((ins[31] ? (sc_int<19>(-1)) : (sc_int<19>(0))), ins[31], ins[7], ins(30, 25), ins(11,8), 0);
             break;
+        case AU_type:
         case U_type:
             im = (ins(31, 12), sc_int<12>(0));
             break;
@@ -24,7 +25,12 @@ void genImm32::proc() {
             break;
         // case I_type:
         default:
-            im = ((ins[31] ? (sc_int<20>(-1)) : (sc_int<20>(0))), ins(31, 20));
+            sc_int<3> funct3 = ins(14, 12);
+            if(funct3 == 1 || funct3 == 5){
+                im = ((ins[31] ? (sc_int<27>(-1)) : (sc_int<27>(0))), ins(24, 20));
+            } else {
+                im = ((ins[31] ? (sc_int<20>(-1)) : (sc_int<20>(0))), ins(31, 20));
+            }
             break;
     }
 	imm.write(im);

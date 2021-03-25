@@ -10,6 +10,7 @@ typedef enum {
     SB_type = 0x63,
     UJ_type = 0x6F,
     U_type = 0x37,
+    AU_type = 0x17,
     I_type
 } FORMAT_RV;
 
