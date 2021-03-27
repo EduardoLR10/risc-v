@@ -1,11 +1,11 @@
 #include <systemc.h>
-#include "top/topMUX3.hpp"
+#include "top/topBREG.hpp"
 
 int sc_main (int argc, char* argv[]) {
 
-    topMUX3 m("mux3");
+    topBREG br("breg");
 
-    sc_start();
+    sc_start(650, SC_NS);
 
     return 0;// Terminate simulation
 
