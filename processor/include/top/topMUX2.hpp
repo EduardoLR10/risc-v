@@ -1,11 +1,12 @@
 #include <systemc.h>
 #include "mux/mux.hpp"
 #include "mux/mux_tb.hpp"
+#include "macros.hpp"
 
 SC_MODULE ( topMUX2 ) {
 
-    mux_tb<2> MUX_tb;
-    mux<2> MUX;
+    mux_tb<sc_int<SIZE>, 2> MUX_tb;
+    mux<sc_int<SIZE>, 2> MUX;
 
     sc_vector<sc_signal<sc_int<SIZE>>> inputs{"inputs", 2};
     sc_signal<int> sel;
