@@ -1,11 +1,11 @@
 #include <systemc.h>
-#include "top/topBREG.hpp"
+#include "top/topDBRANCH.hpp"
 
 int sc_main (int argc, char* argv[]) {
 
-    topBREG br("breg");
+    topDBRANCH db("dbranch");
 
-    sc_start(650, SC_NS);
+    sc_start();
 
     return 0;// Terminate simulation
 

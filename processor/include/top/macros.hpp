@@ -14,4 +14,11 @@ typedef enum {
     I_type
 } FORMAT_RV;
 
+typedef enum {
+    BEQ = 0,
+    BNE = 1,
+    BLT = 2,
+    BGE = 3
+} FORMAT_BRANCH;
+
 #endif
