@@ -3,6 +3,7 @@
 void InstructionMemoryTB::activate()
 {
   // wait for memory contents to be read
+  std::cout << "Hello from IM testbench!\n";
   clock = 0;
   wait(10, SC_NS); 
   address = 0x00000000;

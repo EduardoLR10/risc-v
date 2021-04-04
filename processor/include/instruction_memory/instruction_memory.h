@@ -22,6 +22,8 @@ SC_MODULE(InstructionMemory) {
 
   SC_CTOR(InstructionMemory) {
     SC_METHOD(read_data);
+
+    // load_contents("instruction_memory.bin");
     sensitive << address << clock;
   }
 };
