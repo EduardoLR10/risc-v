@@ -6,6 +6,16 @@
 
 // ************************** ID/EX
 SC_MODULE (reg_EX){
+    // control
+    sc_in< sc_uint<5> > ex_ctrl;
+    sc_in< sc_uint<3> > mem_ctrl;
+    sc_in< sc_uint<2> > wb_ctrl;
+    sc_out< bool > alu_src;
+    sc_out< sc_uint<4> > alu_op;
+    sc_out< sc_uint<3> > mem_ctrl;
+    sc_out< sc_uint<2> > wb_ctrl;
+    
+    // data
     sc_in< sc_uint<5> > id_rs1, id_rs2, id_rd;
     sc_in< sc_uint<SIZE> > id_imm, id_regA, id_regB;
     sc_in<bool> clk, wren, rst;
