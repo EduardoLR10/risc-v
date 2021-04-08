@@ -1,4 +1,4 @@
-#include "instruction_memory/instruction_memory.h"
+#include "instruction_memory/instruction_memory.hpp"
 
 void InstructionMemory::read_data()
 {

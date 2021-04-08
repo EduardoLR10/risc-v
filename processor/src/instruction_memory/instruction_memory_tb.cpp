@@ -1,4 +1,4 @@
-#include "instruction_memory/instruction_memory_tb.h"
+#include "instruction_memory/instruction_memory_tb.hpp"
 
 void InstructionMemoryTB::activate()
 {
@@ -11,6 +11,6 @@ void InstructionMemoryTB::activate()
   wait(1, SC_NS);
   clock = 0;
   std::cout << "address = " << std::setw(W) << std::hex << address.read();
-  std::cout << "output = " << out.read() << std::endl
+  std::cout << "\toutput = " << out.read() << std::endl
             << std::endl;
 }
