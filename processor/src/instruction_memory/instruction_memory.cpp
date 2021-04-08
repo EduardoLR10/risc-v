@@ -2,51 +2,32 @@
 
 void InstructionMemory::read_data()
 {
-  out = data[address.read()];
+  out = data[address.read() / 4];
 }
 
 void InstructionMemory::load_contents(std::string filename)
 {
-  // std::ifstream input(filename, std::ios::binary);
-  // std::vector<uint8_t> bytes(
-  //     (std::istreambuf_iterator<uint8_t>(input)),
-  //     (std::istreambuf_iterator<uint8_t>()));
-
   auto bytes = readBytes(filename);
 
-  if (bytes.size() % 4 != 0) {
+  if (bytes.size() % 4 != 0)
+  {
     std::cout << "Warning: ROM includes incomplete word\n";
   }
 
-  // read words
-  uint32_t word = 0;
-  uint32_t i = 0;
-  while (i < 4*MEMSIZE && i < bytes.size()) {
+  // read words into memory
+  uint32_t i;
+  for (i = 0; i < 4*MEMSIZE && i < bytes.size(); i += 4) {
     // read for bytes from input
-    for (uint32_t j = 0; j < 4; j++) {
-      word += bytes[i+j];
-      word <<= 8;
-    }
-    data[i / 4] = word;
-    i += 4;
+    data[i/4] = (((uint8_t) bytes[i])   << 24)
+              + (((uint8_t) bytes[i+1]) << 16)
+              + (((uint8_t) bytes[i+2]) << 8 )
+              + (((uint8_t) bytes[i+3])      );
   }
 }
 
-std::vector<uint8_t> InstructionMemory::readBytes(std::string filename)
+std::vector<char> InstructionMemory::readBytes(std::string filename)
 {
-    ifstream ifs(filename, ios::binary|ios::ate);
-    ifstream::pos_type pos = ifs.tellg();
-
-    std::vector<char> result(pos);
-
-    ifs.seekg(0, ios::beg);
-    ifs.read(&result[0], pos);
-
-    std::vector<uint8_t> bytes;
-
-    auto char_to_uint8_t = [](char c) { return (uint8_t) c; };
-
-    std::transform(result.begin(), result.end(), std::back_inserter(bytes), char_to_uint8_t);
-
-    return bytes;
+  std::ifstream file(filename, std::ios::binary);
+  return std::vector<char>((std::istreambuf_iterator<char>(file)),
+                            std::istreambuf_iterator<char>());
 }

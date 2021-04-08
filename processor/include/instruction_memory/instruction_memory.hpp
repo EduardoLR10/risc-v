@@ -7,7 +7,7 @@
 #include <vector>
 #include "top/macros.hpp"
 
-#define MEMSIZE 256
+#define MEMSIZE 256 // in words
 
 SC_MODULE(InstructionMemory) {
   sc_in<sc_int<8>> address; // pc signal goes here
@@ -16,7 +16,7 @@ SC_MODULE(InstructionMemory) {
 
   void read_data();
   void load_contents(std::string filename);
-  std::vector<uint8_t> readBytes(std::string filename);
+  std::vector<char> readBytes(std::string filename);
 
   sc_lv<32> data[MEMSIZE];
 
