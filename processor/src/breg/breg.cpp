@@ -6,6 +6,14 @@ void breg::write() {
 }
 	
 void breg::read() {
-    ra.write((rs1.read() == 0)?(sc_int<SIZE>)0 : bank[rs1.read()]);
-    rb.write((rs2.read() == 0)?(sc_int<SIZE>)0 : bank[rs2.read()]);
+    if (rd.read() == rs1.read()){
+        ra.write(d_in.read());
+    } else {
+        ra.write((rs1.read() == 0)?(sc_int<SIZE>)0 : bank[rs1.read()]);
+    }
+    if (rd.read() == rs2.read()){
+        rb.write(d_in.read());
+    } else {
+        rb.write((rs2.read() == 0)?(sc_int<SIZE>)0 : bank[rs2.read()]);
+    }
 }
