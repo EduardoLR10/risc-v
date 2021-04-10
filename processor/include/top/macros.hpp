@@ -15,10 +15,11 @@ typedef enum {
 } FORMAT_RV;
 
 typedef enum {
-    BEQ = 0,
-    BNE = 1,
-    BLT = 2,
-    BGE = 3
+    NO_BRANCH = 0,
+    BEQ = 1,
+    BNE = 2,
+    BLT = 3,
+    BGE = 4
 } FORMAT_BRANCH;
 
 #endif
