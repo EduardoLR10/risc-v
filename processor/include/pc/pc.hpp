@@ -16,8 +16,8 @@ SC_MODULE(pc) {
 
   SC_CTOR(pc) {
     SC_METHOD(proc);
-    sensitive << clock;
-    count = 0;
+    sensitive << clock.pos();
+    // count = 0;
   }
 };
 
