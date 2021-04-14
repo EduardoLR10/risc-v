@@ -7,7 +7,7 @@ SC_MODULE ( topFORWARD ) {
 	forward_tb FORWARD_tb;
 
 	sc_signal< sc_uint<5> > ID_EX_rs1, ID_EX_rs2, EX_MEM_rd, MEM_WB_rd;
-	sc_signal< bool >	EX_MEM_write, MEM_WB_write; // CHECAR O TAMANHO DO SINAL DE CONTROLE
+	sc_signal< bool >	EX_MEM_write, MEM_WB_write;
 	sc_signal< sc_uint<2> > forwardA, forwardB;
 
 	SC_CTOR( topFORWARD ) : FORWARD("FORWARD"), FORWARD_tb("FORWARD_tb") {
