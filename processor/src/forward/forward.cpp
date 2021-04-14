@@ -2,7 +2,7 @@
 
 void forward::proc() {
 	sc_uint<5> idex_rs1, idex_rs2, exmem_rd, memwb_rd;
-	sc_uint<5> exmem_write, memwb_write;
+	sc_uint<1> exmem_write, memwb_write;
 	sc_uint<2> forwA = 0, forwB = 0;
 
 	idex_rs1 = ID_EX_rs1.read();
