@@ -11,7 +11,6 @@ SC_MODULE (reg_MEM){
     sc_in<bool> clk, wren, rst;
     sc_out< sc_uint<5> > mem_rd;
     sc_out< sc_uint<SIZE> > mem_alu_out, mem_mux_alu_b;
-    sc_out< sc_uint<SIZE> > id_pc, id_inst;
 
     void load();
 
@@ -21,7 +20,6 @@ SC_MODULE (reg_MEM){
     }
 
 private:
-    sc_uint<SIZE> pc_buf, inst_buf;
     sc_uint<SIZE> alu_out_buf, mux_alu_b_buf;
     sc_uint<5> rd_buf;
 };

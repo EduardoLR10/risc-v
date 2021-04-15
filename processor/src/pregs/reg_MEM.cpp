@@ -10,6 +10,4 @@ void reg_MEM::load() {
         alu_out_buf = ex_alu_out.read();
         mux_alu_b_buf = ex_mux_alu_b.read();
     }
-    id_pc.write(pc_buf);
-    id_inst.write(inst_buf);
 }
