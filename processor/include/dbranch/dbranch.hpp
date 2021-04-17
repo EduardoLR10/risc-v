@@ -6,7 +6,7 @@
 
 SC_MODULE (dbranch) {
     sc_in< sc_int<SIZE> > ra, rb;
-    sc_in< sc_bv<2>> opcode;
+    sc_in< sc_bv<3>> opcode;
     sc_out<bool> Bout;      
 
     void proc(void);

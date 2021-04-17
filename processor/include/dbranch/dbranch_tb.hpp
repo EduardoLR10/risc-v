@@ -8,7 +8,7 @@
 
 SC_MODULE (dbranch_tb) {
     sc_out< sc_int<SIZE> > ra, rb;
-    sc_out< sc_bv<2>> opcode;
+    sc_out< sc_bv<3>> opcode;
     sc_in<bool> Bout; 
 
     void aciona();
