@@ -12,8 +12,9 @@ sc_signal< sc_uint<SIZE> >
         pc_in,                  // pc input, from mux
         next_pc,                // output of pc adder
         pc_branch,              // output of branch adder
-        instruction,            // output of instruction
+        ft_instruction,         // output of instruction
         // Decode stage
+        jump_addr,              // (PC or BREG[rs1]) + Imm32
         id_pc,                  // pc in decode stage
         id_instruction,         // instruction memory output
         id_imm_ws,              // immediate generated at IF/ID
