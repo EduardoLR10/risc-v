@@ -2,7 +2,7 @@
 
 void dbranch::proc() {
 	sc_int<SIZE> a, b;
-    sc_bv<2> op;
+    sc_bv<3> op;
 
 	a = ra.read();
 	b = rb.read();
@@ -16,11 +16,14 @@ void dbranch::proc() {
             Bout.write(a != b);
             break;
         case BLT:
-            //std::cout << a << " " << b << std::endl;
             Bout.write(a < b);
             break;
         case BGE:
             Bout.write(a >= b);
+            break;
+        // case NO_BRANCH:
+        default:
+            Bout.write(false);
             break;
     }
 

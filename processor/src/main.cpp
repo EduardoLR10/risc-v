@@ -1,10 +1,9 @@
 #include <systemc.h>
-#include "top/topWFORWARD.hpp"
+#include "top/topDBRANCH.hpp"
 
 int sc_main (int argc, char* argv[]) {
 
-    topWFORWARD wf1("wforward");
-
+    topDBRANCH d1("dbranch");
     sc_start();
 
     return 0;
