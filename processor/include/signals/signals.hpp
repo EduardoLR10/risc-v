@@ -16,6 +16,7 @@ sc_signal< sc_uint<SIZE> >
         // Decode stage
         jump_addr,              // (PC or BREG[rs1]) + Imm32
         id_pc,                  // pc in decode stage
+        id_next_pc,             // next instruction pc
         id_instruction,         // instruction memory output
         id_imm_ws,              // immediate generated at IF/ID
         breg_ra,                // first breg output - a
@@ -34,7 +35,6 @@ sc_signal< sc_uint<WSIZE> >
         alu_out,                // ALU output
         // Memory stage
         mem_alu_out,            // ALU output at memory stage
-        mem_mux_alu_a,          // ALU input B at mem stage
         mem_mux_alu_b,          // ALU input B at mem stage
         dm_out,                 // Data memory output
         // Writeback stage
