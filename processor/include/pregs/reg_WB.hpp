@@ -6,6 +6,11 @@
 
 // ************************** MEM/WB
 SC_MODULE (reg_WB){
+    // Control
+    sc_in< sc_uint<2> > wb_ctrl;
+    sc_out< bool > mux_data;
+    sc_out< bool > breg_wr;
+    // Data
     sc_in< sc_uint<5> > mem_rd;
     sc_in< sc_uint<SIZE> > mem_alu_out, mem_mdata_out;
     sc_in<bool> clk, wren, rst;
