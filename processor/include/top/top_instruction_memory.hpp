@@ -7,9 +7,9 @@ SC_MODULE(TopInstructionMemory)
   InstructionMemoryTB imtb;
   InstructionMemory im;
 
-  sc_signal<sc_int<8>> address;
+  sc_signal<sc_uint<8>> address;
   sc_signal<bool> clock;
-  sc_signal<sc_int<32>> out;
+  sc_signal<sc_uint<32>> out;
 
   SC_CTOR(TopInstructionMemory) : imtb("InstructionMemoryTB"), im("InstructionMemory")
   {
