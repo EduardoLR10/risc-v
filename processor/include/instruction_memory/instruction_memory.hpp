@@ -10,8 +10,7 @@
 #define MEMSIZE 256 // in words
 
 SC_MODULE(InstructionMemory) {
-  sc_in<sc_uint<8>> address; // pc signal goes here
-  sc_in<bool> clock;
+  sc_in<sc_uint<32>> address; // pc signal goes here
   sc_out<sc_uint<32>> out;   // goes to ft_instruction 
 
   void read_data();
@@ -24,7 +23,7 @@ SC_MODULE(InstructionMemory) {
     SC_METHOD(read_data);
 
     // load_contents("instruction_memory.bin");
-    sensitive << address << clock;
+    sensitive << address;
   }
 };
 
