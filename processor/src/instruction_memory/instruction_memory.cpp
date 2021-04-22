@@ -2,6 +2,10 @@
 
 void InstructionMemory::read_data()
 {
+  if (bytes.size() % 4 != 0)
+  {
+    std::cout << "Warning: Instruction memory read address is not a multiple of 4\n";
+  }
   out = data[address.read() / 4];
 }
 
