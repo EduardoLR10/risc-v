@@ -1,6 +1,21 @@
 #include "dbranch/dbranch_tb.hpp"
 
 void dbranch_tb::aciona() {
+
+    ra = 0xffffffff; rb = 0x0000ffff; opcode = NO_BRANCH;
+    wait(1, SC_NS);
+    std::cout << "ra = " << std::setw(W) << std::hex << ra.read();
+    std::cout << " rb = " << std::setw(W) << rb.read();
+    std::cout << " op = " << std::setw(W) << opcode.read();
+    std::cout << " Bout = " << Bout << std::endl << std::endl;
+
+    ra = 0x0000ffff; rb = 0xffffffff; opcode = NO_BRANCH;
+    wait(1, SC_NS);
+    std::cout << "ra = " << std::setw(W) << std::hex << ra.read();
+    std::cout << " rb = " << std::setw(W) << rb.read();
+    std::cout << " op = " << std::setw(W) << opcode.read();
+    std::cout << " Bout = " << Bout << std::endl << std::endl;
+
     ra = 0x0000ffff; rb = 0x0000ffff; opcode = BEQ;
     wait(1, SC_NS);
     std::cout << "ra = " << std::setw(W) << std::hex << ra.read();
@@ -8,7 +23,21 @@ void dbranch_tb::aciona() {
     std::cout << " op = " << std::setw(W) << opcode.read();
     std::cout << " Bout = " << Bout << std::endl << std::endl;
 
+    ra = 0x00000000; rb = 0x0000ffff; opcode = BEQ;
+    wait(1, SC_NS);
+    std::cout << "ra = " << std::setw(W) << std::hex << ra.read();
+    std::cout << " rb = " << std::setw(W) << rb.read();
+    std::cout << " op = " << std::setw(W) << opcode.read();
+    std::cout << " Bout = " << Bout << std::endl << std::endl;
+
     ra = 0x0000ffff; rb = 0x0000ffff; opcode = BNE;
+    wait(1, SC_NS);
+    std::cout << "ra = " << std::setw(W) << std::hex << ra.read();
+    std::cout << " rb = " << std::setw(W) << rb.read();
+    std::cout << " op = " << std::setw(W) << opcode.read();
+    std::cout << " Bout = " << Bout << std::endl << std::endl;
+
+    ra = 0x0000ffff; rb = 0x0000fff0; opcode = BNE;
     wait(1, SC_NS);
     std::cout << "ra = " << std::setw(W) << std::hex << ra.read();
     std::cout << " rb = " << std::setw(W) << rb.read();
