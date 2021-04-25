@@ -8,7 +8,7 @@
 SC_MODULE (reg_EX){
     // control
     sc_in< sc_uint<4> > id_ex_ctrl;
-    sc_in< sc_uint<3> > id_mem_ctrl;
+    sc_in< sc_uint<5> > id_mem_ctrl;
     sc_in< sc_uint<2> > id_wb_ctrl;
     sc_out< bool > alu_src_A, alu_src_B;
     sc_out< sc_uint<2> > alu_op;
@@ -17,7 +17,7 @@ SC_MODULE (reg_EX){
 
     // data
     sc_in< sc_uint<5> > id_rs1, id_rs2, id_rd;
-    sc_in< sc_uint<WSIZE> > id_imm, id_regA, id_regB, id_pc;
+    sc_in< sc_uint<SIZE> > id_imm, id_regA, id_regB, id_pc;
     sc_in<bool> clk, wren, rst;
     sc_in< sc_uint<7> > id_funct7;
     sc_in< sc_uint<3> > id_funct3;

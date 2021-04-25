@@ -8,7 +8,7 @@ sc_signal< sc_uint<SIZE> > PC_INC;
 
 sc_signal< sc_uint<SIZE> >
         // Fetch stage
-        pc,                     // riscv pc
+        program_counter,        // riscv pc
         pc_in,                  // pc input, from mux
         next_pc,                // output of pc adder
         pc_branch,              // output of branch adder
@@ -18,18 +18,24 @@ sc_signal< sc_uint<SIZE> >
         id_pc,                  // pc in decode stage
         id_next_pc,             // next instruction pc
         id_instruction,         // instruction memory output
-        id_imm_ws,              // immediate generated at IF/ID
+        id_imm_ws,              // generated immediate
         breg_ra,                // first breg output - a
         breg_rb,                // second breg output - b
+        mux_dbranch_ra,         // mux output for dbranch ra
+        mux_dbranch_rb,         // mux output for dbranch ra
+        data_breg;              // data from mux
 
 sc_signal< sc_uint<7> >
         id_ins_code;            // opcode of RV instruction
 
-sc_signal< sc_uint<WSIZE> >
+sc_signal< sc_uint<SIZE> >
         // Execute stage
+        ex_pc,                  // pc in execute stage
         ex_ra,                  // breg a output at execution stage
         ex_rb,                  // breg b output at execution stage
         ex_imm,                 // immediate at execution stage
+        mux_forward_a,          // forward mux output and ALU mux input
+        mux_forward_b,          // forward mux output and ALU mux input
         mux_alu_a,              // ALU input A
         mux_alu_b,              // ALU input B
         alu_out,                // ALU output
@@ -56,6 +62,25 @@ sc_signal< sc_uint<5> >
         // Memory stage
         wb_rd;                  // rd field in memory stage
 
+sc_signal< sc_uint<2> >
+        forward_a,              // select mux forward A
+        forward_b;              // select mux forward B
+
+sc_signal< sc_uint<4> >
+        opcode_alu;             // alu opcode
+
+sc_signal< sc_uint<3> >
+        ex_funct3;              // funct3 in execute stage
+
+sc_signal< sc_uint<7> >
+        ex_funct7;              // funct7 in execute stage   
+
+sc_signal< bool >
+        // Decode
+        sel_mux_ra_dbranch,
+        sel_mux_rb_dbranch,
+        // Execute
+        zero_alu;
 
         // Control Signals
 
@@ -68,16 +93,19 @@ sc_signal<bool>
 
         // Decode ----------------------------------------------------------
 sc_signal< sc_uint<2> >
-        id_wb_cntr,
+        ex_wb_ctrl,
+        mem_wb_ctrl,
         b_opcode;                   // 0: beq  1: bne  2: blt  3: bge
 sc_signal< sc_uint<5> >
         id_ex_cntr;
 sc_signal< sc_uint<3> >
-        id_mem_cntr;
+        ex_mem_ctrl,
+        mem_mem_ctrl;
 sc_signal<bool>
         b_cond,                     // condition for branch (output dbranch)
         is_jal,                     // identifies jal and jalr
         is_jalr,                    //
+        is_jalx,                    //
         is_branch,                  // identifies branches
         id_flush,                   // insert bubble at decode stage
         wren_breg;                  // enable write on breg
@@ -97,13 +125,16 @@ sc_signal< bool >
                                     // 0: memory access
                                     // 1: arith-logic operations
         // Memory ----------------------------------------------------------
-sc_signal< sc_uint<2> >
-        mem_data_size;              // 0: byte, 1: half, 2: word
+sc_signal< sc_uint<3> >
+        mem_data_size;              // Bit 0: 1 - signed, 0 - unsigned / Bit 1-2: 0 - byte; 1 - half; 2 - word
 sc_signal< bool >
-        mem_rw;                     // 0: read, 1: write
+        mem_rd_en,                     // 0: disable, 1: enable
+        mem_wr_en;                     // 0: disable, 1: enable
+
 
         // WriteBack -------------------------------------------------------
 sc_signal< bool >
+        f_breg_wr,
         wb_sel_mux;                  // 0: memory, 1: ALU
         
 #endif //__SIGNALS_H__

@@ -5,10 +5,6 @@
 #include <stdint.h>
 #include "top/macros.hpp"
 
-#define DATAMEMSIZE 128
-#define BASEADDR 0x2000
-#define IMMSIZE 12
-
 SC_MODULE (dataMem) {
   sc_in< bool > clk, rd_en, wr_en;
   sc_in< sc_uint<3> > d_size;

@@ -2,7 +2,7 @@
 // Created by Ricardo Jacobi on 29/03/21.
 //
 
-#include "control_rv.h"
+#include "control/control.hpp"
 
 INSTRUCTIONS get_instr_code(uint32_t opcode, uint32_t funct3, uint32_t funct7) {
     switch (opcode) {
@@ -79,13 +79,14 @@ INSTRUCTIONS get_instr_code(uint32_t opcode, uint32_t funct3, uint32_t funct7) {
             break;
 //        case ECALL:     return I_ecall;
         default:
-            printf("\n\nInstrucao Invalida (PC = %08x RI = %08x)\n", pc, ri);
+            //printf("\n\nInstrucao Invalida (PC = %08x RI = %08x)\n", pc, ri);
+            std::cout << "Deu ruim" << std::endl;
             break;
     }
     return I_nop;
 }
 
-void control_rv::decode() {
+void control::decode() {
     INSTRUCTIONS ins_code;
     uint32_t opcode, funct3, funct7;
     int32_t aux;
@@ -98,7 +99,7 @@ void control_rv::decode() {
 
     // reset all outputs
     rst_reg_ID = 0;         is_jal = 0;     is_jalr = 0;
-    id_flush = 0            b_code = 0;     is_branch = 0;
+    id_flush = 0;            b_code = 0;     is_branch = 0;
     ex_flush = false;
     ex_ctrl = 0;
     mem_ctrl = 0;
@@ -187,8 +188,9 @@ void control_rv::decode() {
                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
                     break;
         default:
-            printf("Invalid Instruction (PC = %08x RI = %08x)\n", pc, ri);
-            exit(0);
+            //printf("Invalid Instruction (PC = %08x RI = %08x)\n", pc, ri);
+            std::cout << "Deu ruim" << std::endl;
+            //exit(0);
             break;
 
     }
