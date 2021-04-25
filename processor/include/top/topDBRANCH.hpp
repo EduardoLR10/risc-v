@@ -8,7 +8,7 @@ SC_MODULE ( topDBRANCH ) {
     dbranch DBRANCH;
 
     sc_signal< sc_int<SIZE> > ra, rb;
-    sc_signal< sc_bv<2>> opcode;
+    sc_signal< sc_bv<3>> opcode;
     sc_signal<bool> Bout;
 
     SC_CTOR ( topDBRANCH ) : DBRANCH_tb("DBRANCH_tb"), DBRANCH("DBRANCH") {
