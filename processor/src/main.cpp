@@ -1,14 +1,10 @@
 #include <systemc.h>
-#include "top/topMUX3.hpp"
-#include "top/top_instruction_memory.hpp"
+#include "top/topPC.hpp"
 
-int sc_main (int argc, char* argv[]) {
-
-    // topMUX3 m("mux3");
-    TopInstructionMemory tim("TopInstructionMemory");
-
+int sc_main(int argc, char *argv[])
+{
+    TopPC top("TopPC");
     sc_start();
 
-    return 0;// Terminate simulation
-
+    return 0;
 }

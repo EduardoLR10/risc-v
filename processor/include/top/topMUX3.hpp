@@ -1,15 +1,16 @@
 #include <systemc.h>
 #include "mux/mux.hpp"
 #include "mux/mux_tb.hpp"
+#include "macros.hpp"
 
 SC_MODULE ( topMUX3 ) {
 
-    mux_tb<3> MUX_tb;
-    mux<3> MUX;
+    mux_tb<sc_uint<SIZE>, 3> MUX_tb;
+    mux<sc_uint<SIZE>, 3> MUX;
 
-    sc_vector<sc_signal<sc_int<SIZE>>> inputs{"inputs", 3};
+    sc_vector<sc_signal<sc_uint<SIZE>>> inputs{"inputs", 3};
     sc_signal<int> sel;
-    sc_signal<sc_int<SIZE>> Z;
+    sc_signal<sc_uint<SIZE>> Z;
 
     SC_CTOR ( topMUX3 ) : MUX_tb("MUX_tb"), MUX("MUX") {
         MUX.inputs.at(0)(inputs.at(0)); MUX_tb.inputs.at(0)(inputs.at(0));

@@ -4,11 +4,11 @@
 #include <systemc.h>
 #include "top/macros.hpp"
 
-template <int N>
+template <class T, int N>
 SC_MODULE (mux) {
-	sc_vector<sc_in<sc_int<SIZE>>> inputs{"inputs", N};
+	sc_vector<sc_in<T>> inputs{"inputs", N};
 	sc_in<int> sel;
-	sc_out<sc_int<SIZE>> Z;
+	sc_out<T> Z;
 
 	void proc();
 
@@ -22,9 +22,9 @@ SC_MODULE (mux) {
 
 };
 
-template <int N>
-void mux<N>::proc() {
-    sc_int<SIZE> z = inputs.at(sel.read()).read();
+template <class T, int N>
+void mux<T, N>::proc() {
+    T z = inputs.at(sel.read()).read();
 	Z.write(z);
 }
 
