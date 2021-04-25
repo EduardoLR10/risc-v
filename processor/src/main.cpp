@@ -1,9 +1,9 @@
 #include <systemc.h>
-#include "top/topDBRANCH.hpp"
+#include "top/topPC.hpp"
 
-int sc_main (int argc, char* argv[]) {
-
-    topDBRANCH d1("dbranch");
+int sc_main(int argc, char *argv[])
+{
+    TopPC top("TopPC");
     sc_start();
 
     return 0;
