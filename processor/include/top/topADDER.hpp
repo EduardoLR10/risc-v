@@ -7,7 +7,7 @@ SC_MODULE ( topADDER ) {
     adder_tb ADDER_tb;
     adder ADDER;
 
-    sc_signal< sc_int<SIZE> > A_ADDER, B_ADDER, C_ADDER;
+    sc_signal< sc_uint<SIZE> > A_ADDER, B_ADDER, C_ADDER;
     sc_signal< bool > Cin_ADDER, Cout_ADDER;
 
     SC_CTOR ( topADDER ) : ADDER_tb("ADDER_tb"), ADDER("ADDER") {

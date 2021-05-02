@@ -33,6 +33,6 @@ void genImm32::proc() {
             }
             break;
     }
-	imm.write(im);
+	imm.write((im).to_uint());
 	
 }

@@ -7,9 +7,9 @@
 #include "top/macros.hpp"
 
 SC_MODULE (adder_tb) {
-    sc_out<sc_int<SIZE>> A, B;
+    sc_out<sc_uint<SIZE>> A, B;
     sc_out<bool> Cin;
-    sc_in<sc_int<SIZE>> C;
+    sc_in<sc_uint<SIZE>> C;
     sc_in<bool> Cout;   
 
     void aciona();

@@ -5,9 +5,9 @@
 #include "top/macros.hpp"
 
 SC_MODULE (adder) {
-	sc_in<sc_int<SIZE>> A, B;       // inputs
+	sc_in<sc_uint<SIZE>> A, B;       // inputs
 	sc_in<bool> Cin;
-	sc_out<sc_int<SIZE>> C;         // output
+	sc_out<sc_uint<SIZE>> C;         // output
 	sc_out<bool> Cout;         // zero flag
 
 	void proc(void);

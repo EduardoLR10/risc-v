@@ -15,7 +15,7 @@ void InstructionMemory::load_contents(std::string filename)
 
   if (bytes.size() % 4 != 0)
   {
-    std::cout << "Warning: ROM includes incomplete word\n";
+    std::cout << "Warning: ROM includes incomplete word (" << bytes.size() << " bytes)\n";
   }
 
   // read words into memory

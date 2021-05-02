@@ -10,8 +10,8 @@ SC_MODULE ( topDATAMEM ) {
     sc_signal< bool > rd_en, wr_en;
     sc_signal< sc_uint<3> > d_size;
     sc_signal< sc_uint<SIZE> > mem_addr;
-    sc_signal< sc_int<IMMSIZE> > imm;
-    sc_signal< sc_int<SIZE> > wr_data, mem_out;
+    sc_signal< sc_uint<IMMSIZE> > imm;
+    sc_signal< sc_uint<SIZE> > wr_data, mem_out;
 
     sc_clock clk;
 

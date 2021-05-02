@@ -30,9 +30,9 @@ SC_MODULE(control) {
     // wb_ctrl[0]: wren breg; wb_ctrl[1]: mux_mem
     sc_out< sc_uint<2> > wb_ctrl;
 
-    void decode();
-
     INSTRUCTIONS get_instr_code(uint32_t, uint32_t, uint32_t);
+
+    void decode();
 
     SC_CTOR(control): ALU_A_ZERO(0), ALU_A_PC(1), ALU_A_RA(2),
     ALU_B_RB(false),  ALU_B_IMM(true), SEL_MEM_DATA(true), SEL_ALU_DATA(false),
@@ -44,23 +44,23 @@ SC_MODULE(control) {
           sensitive << instruction;
     }
 private:
-    const sc_uint<2> ALU_A_ZERO; // 0
-    const sc_uint<2> ALU_A_PC;   // 1
-    const sc_uint<2> ALU_A_RA;   // 2
-    const bool ALU_B_RB;         // false
-    const bool ALU_B_IMM;        // true
-    const bool NO_WRITE;         // false
-    const bool NO_READ;          // false
-    const bool MEM_READ;         // true
-    const bool MEM_WRITE;        // true
-    const bool SEL_MEM_DATA;     // true
-    const bool SEL_ALU_DATA;     // false
-    const bool WRITE_BREG;       // true
-    const bool SIGNED_DATA;      // true
-    const bool UNSIGNED_DATA;    // false
-    const sc_uint<2> BYTE_SIZE;  // 0
-    const sc_uint<2> HALF_SIZE;  // 1
-    const sc_uint<2> WORD_SIZE;  // 2
+    const sc_uint<2> ALU_A_ZERO = 0; // 0
+    const sc_uint<2> ALU_A_PC = 1;   // 1
+    const sc_uint<2> ALU_A_RA = 2;      // 2
+    const bool ALU_B_RB = false;        // false
+    const bool ALU_B_IMM = true;        // true
+    const bool NO_WRITE = false;        // false
+    const bool NO_READ = false;         // false
+    const bool MEM_READ = true;         // true
+    const bool MEM_WRITE = true;        // true
+    const bool SEL_MEM_DATA = true;     // true
+    const bool SEL_ALU_DATA = true;     // false
+    const bool WRITE_BREG = true;       // true
+    const bool SIGNED_DATA = true;      // true
+    const bool UNSIGNED_DATA = false;   // false
+    const sc_uint<2> BYTE_SIZE = 0;     // 0
+    const sc_uint<2> HALF_SIZE = 1;     // 1
+    const sc_uint<2> WORD_SIZE = 2;     // 2
 };
 
 #endif //RISCV_PIPE_CONTROL_RV_H

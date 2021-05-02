@@ -26,7 +26,7 @@ SC_MODULE(RISCV)
   // stage 1 : FETCH
   adder FETCH_ADDER;
   pc FETCH_PC;
-  mux<sc_int<SIZE>, 2> FETCH_MUX;
+  mux<sc_uint<SIZE>, 2> FETCH_MUX;
   InstructionMemory FETCH_INSTRUCTION_MEMORY;
   reg_ID IF_ID;
   // stage 2 : DECODE
@@ -34,10 +34,10 @@ SC_MODULE(RISCV)
   adder DECODE_ADDER;
   breg DECODE_BREG;
   dbranch DECODE_DBRANCH;
-  mux<sc_int<SIZE>, 2> DECODE_MUX_DBRANCH_A;
-  mux<sc_int<SIZE>, 2> DECODE_MUX_DBRANCH_B;
-  mux<sc_int<SIZE>, 2> DECODE_MUX_BREG;
-  mux<sc_int<SIZE>, 2> DECODE_MUX_ADDER;
+  mux<sc_uint<SIZE>, 2> DECODE_MUX_DBRANCH_A;
+  mux<sc_uint<SIZE>, 2> DECODE_MUX_DBRANCH_B;
+  mux<sc_uint<SIZE>, 2> DECODE_MUX_BREG;
+  mux<sc_uint<SIZE>, 2> DECODE_MUX_ADDER;
   wforward DECODE_WFORWARD;
   reg_EX ID_EX;
 
@@ -45,10 +45,10 @@ SC_MODULE(RISCV)
   ula EXECUTE_ULA;
   forward EXECUTE_FORWARD;
   aluControl EXECUTE_ALUCONTROL;
-  mux<sc_int<SIZE>, 3> EXECUTE_MUX_FORWARDA;
-  mux<sc_int<SIZE>, 3> EXECUTE_MUX_FORWARDB;
-  mux<sc_int<SIZE>, 3> EXECUTE_MUX_ALUA;
-  mux<sc_int<SIZE>, 2> EXECUTE_MUX_ALUB;
+  mux<sc_uint<SIZE>, 3> EXECUTE_MUX_FORWARDA;
+  mux<sc_uint<SIZE>, 3> EXECUTE_MUX_FORWARDB;
+  mux<sc_uint<SIZE>, 3> EXECUTE_MUX_ALUA;
+  mux<sc_uint<SIZE>, 2> EXECUTE_MUX_ALUB;
   reg_MEM EX_MEM;
 
   // stage 4 : MEMORY
@@ -56,7 +56,7 @@ SC_MODULE(RISCV)
   reg_WB MEM_WB;
 
   // stage 5 : WRITEBACK
-  mux<sc_int<SIZE>, 2> WB_MUX;
+  mux<sc_uint<SIZE>, 2> WB_MUX;
 
   // CONTROL
   control CONTROLLER;
@@ -64,9 +64,11 @@ SC_MODULE(RISCV)
   mux<sc_uint<3>, 2> CONTROL_MUX_2;
 
   // UNIVERSAL SIGNALS
-  sc_signal<bool> clock;
+  sc_signal<bool> clock1;
+  sc_clock clock;
   
   SC_CTOR(RISCV) :
+    clock("clock", 10.0, SC_NS),
     // stage 1
     FETCH_ADDER("FETCH_ADDER"), FETCH_PC("FETCH_PC"), FETCH_MUX("FETCH_MUX"), FETCH_INSTRUCTION_MEMORY("FETCH_INSTRUCTION_MEMORY"), IF_ID("IF_ID"),
     // stage 2
@@ -84,10 +86,28 @@ SC_MODULE(RISCV)
     // controller
     CONTROLLER("CONTROLLER"), CONTROL_MUX_1("CONTROL_MUX_1"), CONTROL_MUX_2("CONTROL_MUX_2")
   {
+
+    // CONSTANTS
+    sc_signal<bool> true_sig;
+    true_sig.write(true);
+
+    sc_signal<bool> false_sig;
+    false_sig.write(false);
+
+    sc_signal<sc_uint<SIZE>> four;
+    four.write(4);
+
+    sc_signal<sc_uint<SIZE>> zero;
+    zero.write(0);
+
+    sc_signal<sc_uint<SIZE>> one;
+    one.write(1);
+
     // stage 1
-    FETCH_ADDER.A(4);
+    FETCH_INSTRUCTION_MEMORY.load_contents("add.bin");
+    FETCH_ADDER.A(four);
     FETCH_ADDER.B(program_counter);
-    FETCH_ADDER.Cin(false);
+    FETCH_ADDER.Cin(false_sig);
     FETCH_ADDER.C(next_pc);
     // FETCH_ADDER.Cout();  // ignore
 
@@ -98,7 +118,9 @@ SC_MODULE(RISCV)
 
     FETCH_MUX.inputs.at(0)(next_pc);
     FETCH_MUX.inputs.at(1)(pc_branch);
-    FETCH_MUX.sel((is_branch.read() && b_cond.read()) || (is_jal.read()));
+    sc_signal<int> fetch_sel_in;
+    fetch_sel_in.write((int) (is_branch.read() && b_cond.read()) || (is_jal.read()));
+    FETCH_MUX.sel(fetch_sel_in);
     FETCH_MUX.Z(pc_in);
 
     // TODO: load IM contents from binary file
@@ -132,12 +154,16 @@ SC_MODULE(RISCV)
     DECODE_BREG.clk(clock);
     DECODE_MUX_BREG.inputs.at(0)(wb_mux_data);
     DECODE_MUX_BREG.inputs.at(1)(id_next_pc);
-    DECODE_MUX_BREG.sel(is_jal);
+    sc_signal<int> decode_mux_breg_sel;
+    decode_mux_breg_sel.write((int) is_jal.read());
+    DECODE_MUX_BREG.sel(decode_mux_breg_sel);
     DECODE_MUX_BREG.Z(data_breg);
 
     DECODE_MUX_ADDER.inputs.at(0)(id_pc);
     DECODE_MUX_ADDER.inputs.at(1)(breg_ra);
-    DECODE_MUX_ADDER.sel(is_jalr);
+    sc_signal<int> decode_mux_adder_sel;
+    decode_mux_adder_sel.write((int) is_jalr.read());
+    DECODE_MUX_ADDER.sel(decode_mux_adder_sel);
     DECODE_MUX_ADDER.Z(jump_addr);
     DECODE_ADDER.A(jump_addr);
     DECODE_ADDER.B(id_imm_ws);
@@ -146,13 +172,17 @@ SC_MODULE(RISCV)
     DECODE_GENIMM32.imm(id_imm_ws);
 
     DECODE_MUX_DBRANCH_A.inputs.at(0)(breg_ra);
-    DECODE_MUX_DBRANCH_A.inputs.at(1)(wb_rd);
-    DECODE_MUX_DBRANCH_A.sel(sel_mux_ra_dbranch);
+    DECODE_MUX_DBRANCH_A.inputs.at(1)(wb_mux_data);
+    sc_signal<int> decode_mux_dbranch_ra_sel;
+    decode_mux_dbranch_ra_sel.write((int) sel_mux_ra_dbranch.read());
+    DECODE_MUX_DBRANCH_A.sel(decode_mux_dbranch_ra_sel);
     DECODE_MUX_DBRANCH_A.Z(mux_dbranch_ra);
 
     DECODE_MUX_DBRANCH_B.inputs.at(0)(breg_rb);
-    DECODE_MUX_DBRANCH_B.inputs.at(1)(wb_rd);
-    DECODE_MUX_DBRANCH_B.sel(sel_mux_rb_dbranch);
+    DECODE_MUX_DBRANCH_B.inputs.at(1)(wb_mux_data);
+    sc_signal<int> decode_mux_dbranch_rb_sel;
+    decode_mux_dbranch_rb_sel.write((int) sel_mux_rb_dbranch.read());
+    DECODE_MUX_DBRANCH_B.sel(decode_mux_dbranch_rb_sel);
     DECODE_MUX_DBRANCH_B.Z(mux_dbranch_rb);
 
     DECODE_WFORWARD.rs1(id_rs1);
@@ -172,11 +202,17 @@ SC_MODULE(RISCV)
     ID_EX.id_regA(breg_ra);
     ID_EX.id_regB(breg_rb);
     ID_EX.id_pc(id_pc);
-    ID_EX.id_clk(clock);
-    ID_EX.wren(1);
-    ID_EX.rst(0);
-    ID_EX.id_funct7(id_instruction(31, 25));
-    ID_EX.id_funct3(id_instruction(14, 12));
+    ID_EX.clk(clock);
+    // ID_EX.wren(one);
+    // ID_EX.rst(zero);
+    ID_EX.wren(true_sig);
+    ID_EX.rst(false_sig);
+    sc_signal<sc_uint<7>> id_ex_funct7;
+    sc_signal<sc_uint<3>> id_ex_funct3;
+    id_ex_funct7.write(((id_instruction.read())(31, 25)));
+    id_ex_funct7.write(((id_instruction.read())(14, 12)));
+    ID_EX.id_funct7(id_ex_funct7);
+    ID_EX.id_funct3(id_ex_funct3);
 
     // stage 3
 
@@ -188,57 +224,70 @@ SC_MODULE(RISCV)
     ID_EX.ex_regB(ex_rb);
     ID_EX.ex_pc(ex_pc);
     ID_EX.ex_funct7(ex_funct7);
-    ID_EX.ex_funct7(ex_funct3);
+    ID_EX.ex_funct3(ex_funct3);
     
     EXECUTE_MUX_FORWARDA.inputs.at(0)(ex_ra);
     EXECUTE_MUX_FORWARDA.inputs.at(1)(wb_mux_data);
     EXECUTE_MUX_FORWARDA.inputs.at(2)(mem_alu_out);
-    EXECUTE_MUX_FORWARDA.sel(forward_a);
+    sc_signal<int> execute_mux_forwarda_sel;
+    execute_mux_forwarda_sel.write((forward_a).read());
+    EXECUTE_MUX_FORWARDA.sel(execute_mux_forwarda_sel);
     EXECUTE_MUX_FORWARDA.Z(mux_forward_a);
     
     EXECUTE_MUX_FORWARDB.inputs.at(0)(ex_rb);
     EXECUTE_MUX_FORWARDB.inputs.at(1)(wb_mux_data);
     EXECUTE_MUX_FORWARDB.inputs.at(2)(mem_alu_out);
-    EXECUTE_MUX_FORWARDB.sel(forward_b);
+    sc_signal<int> execute_mux_forwardb_sel;
+    execute_mux_forwarda_sel.write((forward_b).read());
+    EXECUTE_MUX_FORWARDB.sel(execute_mux_forwardb_sel);
     EXECUTE_MUX_FORWARDB.Z(mux_forward_b);
 
-    EXECUTE_MUX_ALUA.inputs.at(0)(sc_uint<SIZE>(0));
+    EXECUTE_MUX_ALUA.inputs.at(0)(zero);
     EXECUTE_MUX_ALUA.inputs.at(1)(ex_pc);
     EXECUTE_MUX_ALUA.inputs.at(2)(mux_forward_a);
-    EXECUTE_MUX_ALUA.sel(sel_alu_A);
+
+    sc_signal<int> execute_mux_alua_sel;
+    execute_mux_alua_sel.write(sel_alu_A.read());
+    EXECUTE_MUX_ALUA.sel(execute_mux_alua_sel);
+
     EXECUTE_MUX_ALUA.Z(mux_alu_a);
     
     EXECUTE_MUX_ALUB.inputs.at(0)(mux_forward_b);
     EXECUTE_MUX_ALUB.inputs.at(1)(ex_imm);
-    EXECUTE_MUX_ALUB.sel(sel_alu_B);
+
+    sc_signal<int> execute_mux_alub_sel;
+    execute_mux_alub_sel.write(sel_alu_B.read());
+    EXECUTE_MUX_ALUB.sel(execute_mux_alub_sel);
     EXECUTE_MUX_ALUB.Z(mux_alu_b);
 
     EXECUTE_FORWARD.ID_EX_rs1(ex_rs1);
     EXECUTE_FORWARD.ID_EX_rs2(ex_rs2);
     EXECUTE_FORWARD.EX_MEM_rd(ex_rd);
     EXECUTE_FORWARD.MEM_WB_rd(wb_rd);
-    EXECUTE_FORWARD.EX_MEM_write(wren_breg);
+    EXECUTE_FORWARD.EX_MEM_write(mem_wr_en);
     EXECUTE_FORWARD.MEM_WB_write(f_breg_wr);
     EXECUTE_FORWARD.forwardA(forward_a);
     EXECUTE_FORWARD.forwardB(forward_b);
 
-    EXECUTE_ALUCONTROL.ex_funct7(funct7);
-    EXECUTE_ALUCONTROL.ex_funct3(funct3);
+    EXECUTE_ALUCONTROL.ex_funct7(ex_funct7);
+    EXECUTE_ALUCONTROL.ex_funct3(ex_funct3);
     EXECUTE_ALUCONTROL.alu_op(alu_op);
     EXECUTE_ALUCONTROL.opcode_alu(opcode_alu);
 
-    EXECUTE_ULA.A_ULA(mux_alu_a);
-    EXECUTE_ULA.B_ULA(mux_alu_b);
-    EXECUTE_ULA.Z_ULA(alu_out);
-    EXECUTE_ULA.opcode_ULA(opcode_alu);
-    EXECUTE_ULA.zero_ULA(zero_alu);
+    EXECUTE_ULA.A(mux_alu_a);
+    EXECUTE_ULA.B(mux_alu_b);
+    EXECUTE_ULA.Z(alu_out);
+    EXECUTE_ULA.opcode(opcode_alu);
+    EXECUTE_ULA.zero(zero_alu);
 
     EX_MEM.ex_rd(ex_rd);
     EX_MEM.ex_alu_out(alu_out);
     EX_MEM.ex_mux_alu_b(mux_alu_b);
     EX_MEM.clk(clock);
-    EX_MEM.wren(1);
-    EX_MEM.rst(0);
+    // EX_MEM.wren(one);
+    // EX_MEM.rst(zero);
+    EX_MEM.wren(true_sig);
+    EX_MEM.rst(false_sig);
 
     // stage 4
 
@@ -254,22 +303,26 @@ SC_MODULE(RISCV)
     DATA_MEMORY.wr_en(mem_wr_en);
     DATA_MEMORY.d_size(mem_data_size);
     DATA_MEMORY.mem_addr(mem_mux_alu_b);
-    DATA_MEMORY.imm(0);
+    sc_signal<sc_uint<IMMSIZE>> data_mem_imm_zero;
+    data_mem_imm_zero.write(0);
+    DATA_MEMORY.imm(data_mem_imm_zero);
     DATA_MEMORY.wr_data(mem_alu_out);
     DATA_MEMORY.mem_out(dm_out);
     DATA_MEMORY.clk(clock);
 
-    MEM_WB.wb_ctrl(wb_sel_mux, wren_breg);
+    sc_signal<sc_uint<2>> wb_ctrl_concat;
+    wb_ctrl_concat.write(((int) wb_sel_mux.read(), (int) wren_breg.read()));
+    MEM_WB.wb_ctrl(wb_ctrl_concat);
     MEM_WB.mem_rd(mem_rd);
     MEM_WB.mem_alu_out(mem_alu_out);
     MEM_WB.mem_mdata_out(dm_out);
     MEM_WB.clk(clock);
-    MEM_WB.wren(1);
-    MEM_WB.rst(0);
+    MEM_WB.wren(true_sig);
+    MEM_WB.rst(false_sig);
 
     // stage 5
 
-    MEM_WB.mux_data(wb_mux_data);
+    MEM_WB.mux_data(wb_sel_mux);
     MEM_WB.breg_wr(f_breg_wr);
     MEM_WB.wb_rd(wb_rd);
     MEM_WB.wb_alu_out(wb_alu_out);
@@ -277,7 +330,9 @@ SC_MODULE(RISCV)
 
     WB_MUX.inputs.at(0)(wb_md_out);
     WB_MUX.inputs.at(1)(wb_alu_out);
-    WB_MUX.sel(wb_sel_mux);
+    sc_signal<int> wb_mux_sel;
+    wb_mux_sel.write((wb_sel_mux).read());
+    WB_MUX.sel(wb_mux_sel);
     WB_MUX.Z(wb_mux_data);
 
     // controller
@@ -291,22 +346,40 @@ SC_MODULE(RISCV)
     CONTROLLER.is_branch(is_branch);
     CONTROLLER.b_code(b_opcode);
     CONTROLLER.ex_flush(ex_flush);
-    CONTROLLER.ex_ctrl(alu_op, sel_alu_B, sel_alu_A);
-    CONTROLLER.mem_ctrl(mem_data_size, mem_wr_en, mem_rd_en);
-    CONTROLLER.wb_ctrl(wb_sel_mux, wren_breg);
+    sc_signal<sc_uint<4>> controller_ex_ctrl;
+    controller_ex_ctrl.write(((int) alu_op.read(), (int) sel_alu_B.read(), (int) sel_alu_A.read()));
+    CONTROLLER.ex_ctrl(controller_ex_ctrl);
+    sc_signal<sc_uint<5>> controller_mem_ctrl;
+    controller_mem_ctrl.write(((int) mem_data_size.read(), (int) mem_wr_en.read(), (int) mem_rd_en.read()));
+    CONTROLLER.mem_ctrl(controller_mem_ctrl);
+    sc_signal<sc_uint<2>> controller_wb_ctrl;
+    controller_wb_ctrl.write(((int) wb_sel_mux.read(), (int) mem_wr_en.read()));
+    CONTROLLER.wb_ctrl(controller_wb_ctrl);
     
-    ID_EX.id_ex_ctrl(alu_op, sel_alu_B, sel_alu_A);
-    ID_EX.id_mem_ctrl(mem_data_size, mem_wr_en, mem_rd_en);
-    ID_EX.id_wb_ctrl(wb_sel_mux, wren_breg);
+    sc_signal<sc_uint<4>> id_ex_ctrl_concat;
+    id_ex_ctrl_concat.write(((int) alu_op.read(), (int) sel_alu_B.read(), (int) sel_alu_A.read()));
+    ID_EX.id_ex_ctrl(id_ex_ctrl_concat);
+    sc_signal<sc_uint<5>> id_mem_ctrl_concat;
+    id_mem_ctrl_concat.write(((int) mem_data_size.read(), (int) mem_wr_en.read(), (int) mem_rd_en.read()));
+    ID_EX.id_mem_ctrl(id_mem_ctrl_concat);
+    sc_signal<sc_uint<2>> id_wb_ctrl_concat;
+    id_wb_ctrl_concat.write(((int) wb_sel_mux.read(), (int) wren_breg.read()));
+    ID_EX.id_wb_ctrl(id_wb_ctrl_concat);
     
-    CONTROL_MUX_1.inputs.at(0)(sc_uint<2>(0));
+    sc_signal<sc_uint<2>> zero2;
+    zero2.write(0);
+    CONTROL_MUX_1.inputs.at(0)(zero2);
     CONTROL_MUX_1.inputs.at(1)(ex_wb_ctrl);
-    CONTROL_MUX_1.sel(ex_flush);
+    sc_signal<int> controller_ex_flush;
+    controller_ex_flush.write(ex_flush);
+    CONTROL_MUX_1.sel(controller_ex_flush);
     CONTROL_MUX_1.Z(mem_wb_ctrl);
     
-    CONTROL_MUX_2.inputs.at(0)(sc_uint<3>(0));
+    sc_signal<sc_uint<3>> zero3;
+    zero3.write(0);
+    CONTROL_MUX_2.inputs.at(0)(zero3);
     CONTROL_MUX_2.inputs.at(1)(ex_mem_ctrl);
-    CONTROL_MUX_2.sel(ex_flush);
+    CONTROL_MUX_2.sel(controller_ex_flush);
     CONTROL_MUX_2.Z(mem_mem_ctrl);
   }
 };

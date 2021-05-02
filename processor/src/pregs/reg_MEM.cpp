@@ -16,7 +16,7 @@ void reg_MEM::load() {
     mem_mux_alu_b.write(mux_alu_b_buf);
     mem_rd.write(rd_buf);
     mem_wb_ctrl.write(wb_ctrl_buf);
-    d_size(sc_uint<3>(0))
+    d_size.write(sc_uint<3>(0));
     rd_en.write(1);
     wr_en.write(0);
 }

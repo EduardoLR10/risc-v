@@ -10,8 +10,8 @@ enum OPCODE {
 
 SC_MODULE (ula) {
   sc_in<sc_uint<4>> opcode;
-  sc_in<sc_int<SIZE>> A, B;       // inputs
-  sc_out<sc_int<SIZE>> Z;         // output
+  sc_in<sc_uint<SIZE>> A, B;       // inputs
+  sc_out<sc_uint<SIZE>> Z;         // output
   sc_out<bool> zero;         // zero flag
 
   void proc(void);

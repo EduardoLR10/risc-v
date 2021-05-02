@@ -4,7 +4,7 @@
 
 #include "control/control.hpp"
 
-INSTRUCTIONS get_instr_code(uint32_t opcode, uint32_t funct3, uint32_t funct7) {
+INSTRUCTIONS control::get_instr_code(uint32_t opcode, uint32_t funct3, uint32_t funct7) {
     switch (opcode) {
         case LUI:   return I_lui;
         case AUIPC: return I_auipc;

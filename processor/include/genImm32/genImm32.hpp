@@ -5,8 +5,8 @@
 #include "top/macros.hpp"
 
 SC_MODULE (genImm32) {
-  sc_in<sc_int<SIZE>> instruction;       // inputs
-  sc_out<sc_int<SIZE>> imm;         // output
+  sc_in<sc_uint<SIZE>> instruction;       // inputs
+  sc_out<sc_uint<SIZE>> imm;         // output
 
   void proc(void);
 

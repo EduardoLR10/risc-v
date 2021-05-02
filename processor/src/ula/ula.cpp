@@ -24,6 +24,6 @@ void ula::proc() {
 		default: std::cout << "Error! Invalid Opcode!" << std::endl; z = 0; break;
 	}
 
-	Z.write(z);
+	Z.write(z.to_uint());
 	zero.write(z == 0);
 }

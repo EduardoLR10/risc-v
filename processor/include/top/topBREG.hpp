@@ -8,7 +8,7 @@ SC_MODULE ( topBREG ) {
     breg_tb BREG_tb;
 
     sc_signal< sc_uint<5> > rs1, rs2, rd;
-	sc_signal< sc_int<SIZE> > d_in;
+	sc_signal< sc_uint<SIZE> > d_in;
 	sc_signal< bool > wren;
 	sc_signal< sc_int<SIZE> > ra, rb;
     sc_clock clk;

@@ -6,9 +6,9 @@
 
 SC_MODULE(breg) {
 	sc_in< sc_uint<5> > rs1, rs2, rd;
-	sc_in< sc_int<SIZE> > d_in;
+	sc_in< sc_uint<SIZE> > d_in;
 	sc_in< bool > wren, clk;
-	sc_out< sc_int<SIZE> > ra, rb;
+	sc_out< sc_uint<SIZE> > ra, rb;
 	
     void write(void);
     void read(void);
@@ -22,7 +22,7 @@ SC_MODULE(breg) {
 	}
 	
 private:
-	sc_int<SIZE> bank[32];
+	sc_uint<SIZE> bank[32];
 	
 };
 
