@@ -146,7 +146,7 @@ SC_MODULE(RISCV)
 
     DECODE_BREG.rs1(id_rs1);
     DECODE_BREG.rs2(id_rs2);
-    DECODE_BREG.rd(id_rd);
+    DECODE_BREG.rd(wb_rd);
     DECODE_BREG.d_in(data_breg);
     DECODE_BREG.ra(breg_ra);
     DECODE_BREG.rb(breg_rb);
@@ -165,8 +165,11 @@ SC_MODULE(RISCV)
     decode_mux_adder_sel.write((int) is_jalr.read());
     DECODE_MUX_ADDER.sel(decode_mux_adder_sel);
     DECODE_MUX_ADDER.Z(jump_addr);
+
     DECODE_ADDER.A(jump_addr);
     DECODE_ADDER.B(id_imm_ws);
+    DECODE_ADDER.C(pc_branch);
+    DECODE_ADDER.Cin(false_sig);
 
     DECODE_GENIMM32.instruction(id_instruction);
     DECODE_GENIMM32.imm(id_imm_ws);
@@ -193,6 +196,7 @@ SC_MODULE(RISCV)
 
     DECODE_DBRANCH.ra(mux_dbranch_ra);
     DECODE_DBRANCH.rb(mux_dbranch_rb);
+    DECODE_DBRANCH.opcode(b_opcode);
     DECODE_DBRANCH.Bout(b_cond);
 
     ID_EX.id_rs1(id_rs1);
@@ -210,7 +214,7 @@ SC_MODULE(RISCV)
     sc_signal<sc_uint<7>> id_ex_funct7;
     sc_signal<sc_uint<3>> id_ex_funct3;
     id_ex_funct7.write(((id_instruction.read())(31, 25)));
-    id_ex_funct7.write(((id_instruction.read())(14, 12)));
+    id_ex_funct3.write(((id_instruction.read())(14, 12)));
     ID_EX.id_funct7(id_ex_funct7);
     ID_EX.id_funct3(id_ex_funct3);
 
@@ -245,16 +249,13 @@ SC_MODULE(RISCV)
     EXECUTE_MUX_ALUA.inputs.at(0)(zero);
     EXECUTE_MUX_ALUA.inputs.at(1)(ex_pc);
     EXECUTE_MUX_ALUA.inputs.at(2)(mux_forward_a);
-
     sc_signal<int> execute_mux_alua_sel;
     execute_mux_alua_sel.write(sel_alu_A.read());
     EXECUTE_MUX_ALUA.sel(execute_mux_alua_sel);
-
     EXECUTE_MUX_ALUA.Z(mux_alu_a);
     
     EXECUTE_MUX_ALUB.inputs.at(0)(mux_forward_b);
     EXECUTE_MUX_ALUB.inputs.at(1)(ex_imm);
-
     sc_signal<int> execute_mux_alub_sel;
     execute_mux_alub_sel.write(sel_alu_B.read());
     EXECUTE_MUX_ALUB.sel(execute_mux_alub_sel);
@@ -262,7 +263,7 @@ SC_MODULE(RISCV)
 
     EXECUTE_FORWARD.ID_EX_rs1(ex_rs1);
     EXECUTE_FORWARD.ID_EX_rs2(ex_rs2);
-    EXECUTE_FORWARD.EX_MEM_rd(ex_rd);
+    EXECUTE_FORWARD.EX_MEM_rd(mem_rd);
     EXECUTE_FORWARD.MEM_WB_rd(wb_rd);
     EXECUTE_FORWARD.EX_MEM_write(mem_wr_en);
     EXECUTE_FORWARD.MEM_WB_write(f_breg_wr);
@@ -282,7 +283,7 @@ SC_MODULE(RISCV)
 
     EX_MEM.ex_rd(ex_rd);
     EX_MEM.ex_alu_out(alu_out);
-    EX_MEM.ex_mux_alu_b(mux_alu_b);
+    EX_MEM.ex_mux_alu_b(mux_forward_b);
     EX_MEM.clk(clock);
     // EX_MEM.wren(one);
     // EX_MEM.rst(zero);
