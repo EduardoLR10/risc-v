@@ -1,6 +1,6 @@
-#include "forward/forward_tb.hpp"
+#include "forward/eforward_tb.hpp"
 
-void forward_tb::aciona() {
+void eforward_tb::aciona() {
 	ID_EX_rs1 = 0;	ID_EX_rs2 = 0;	EX_MEM_rd = 0;	MEM_WB_rd = 0;
 	EX_MEM_write = 0;	MEM_WB_write = 0;
 	wait(1, SC_NS);
