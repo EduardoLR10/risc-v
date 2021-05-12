@@ -1,4 +1,4 @@
-#include "forward/eforward.hpp"
+#include "eforward/eforward.hpp"
 
 void eforward::proc() {
 	sc_uint<5> idex_rs1, idex_rs2, exmem_rd, memwb_rd;
