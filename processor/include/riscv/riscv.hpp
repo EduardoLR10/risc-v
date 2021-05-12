@@ -9,7 +9,7 @@
 #include "control/control.hpp"
 #include "dataMem/dataMem.hpp"
 #include "ula/ula.hpp"
-#include "forward/forward.hpp"
+#include "forward/eforward.hpp"
 #include "instruction_memory/instruction_memory.hpp"
 #include "aluControl/aluControl.hpp"
 #include "pregs/reg_EX.hpp"
@@ -44,7 +44,7 @@ SC_MODULE(RISCV)
 
   // stage 3 : EXECUTE
   ula EXECUTE_ULA;
-  forward EXECUTE_FORWARD;
+  eforward EXECUTE_FORWARD;
   aluControl EXECUTE_ALUCONTROL;
   mux<sc_uint<SIZE>, 3> EXECUTE_MUX_FORWARDA;
   mux<sc_uint<SIZE>, 3> EXECUTE_MUX_FORWARDB;
