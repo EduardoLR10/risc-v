@@ -10,14 +10,7 @@ SC_MODULE(topRISCV)
   
   SC_CTOR(topRISCV) : processor("RISCV"), clk("clk", 10.0, SC_NS)
   {
-    SC_THREAD(Up);
-    sensitive << clk.negedge_event();
-    SC_METHOD(Down);
-    sensitive << clk.posedge_event();
+    processor.clock(clk);
   }
-
-  void Up(){}
-
-  void Down(){}
 
 };

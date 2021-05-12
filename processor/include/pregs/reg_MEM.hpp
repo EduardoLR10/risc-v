@@ -7,7 +7,7 @@
 // ************************** EX/MEM
 SC_MODULE (reg_MEM){
 // Control
-    sc_in< sc_uint<3> > ex_mem_ctrl;
+    sc_in< sc_uint<5> > ex_mem_ctrl;
     sc_in< sc_uint<2> > ex_wb_ctrl;
     
 // Mem control
@@ -17,10 +17,10 @@ SC_MODULE (reg_MEM){
     sc_out< sc_uint<2> > mem_wb_ctrl;
 
 // Data
-    sc_in< sc_uint<5> > ex_rd;
+    sc_in< sc_uint<5> > ex_rd, ex_rs2;
     sc_in< sc_uint<SIZE> > ex_alu_out, ex_mux_alu_b;
     sc_in<bool> clk, wren, rst;
-    sc_out< sc_uint<5> > mem_rd;
+    sc_out< sc_uint<5> > mem_rd, mem_rs2;
     sc_out< sc_uint<SIZE> > mem_alu_out, mem_mux_alu_b;
 
     void load();

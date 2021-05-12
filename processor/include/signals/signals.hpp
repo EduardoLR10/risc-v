@@ -23,7 +23,7 @@ sc_signal< sc_uint<SIZE> >
         breg_rb,                // second breg output - b
         mux_dbranch_ra,         // mux output for dbranch ra
         mux_dbranch_rb,         // mux output for dbranch ra
-        data_breg;              // data from mux
+        return_addr;            // return address
 
 sc_signal< sc_uint<7> >
         id_ins_code;            // opcode of RV instruction
@@ -42,6 +42,7 @@ sc_signal< sc_uint<SIZE> >
         // Memory stage
         mem_alu_out,            // ALU output at memory stage
         mem_mux_alu_b,          // ALU input B at mem stage
+        mdata,                  // Mux Mem output
         dm_out,                 // Data memory output
         // Writeback stage
         wb_md_out,              // Data mem ouput at writeback stage
@@ -59,6 +60,7 @@ sc_signal< sc_uint<5> >
         ex_rd,                  // rd  field in execute stage
         // Memory stage
         mem_rd,                 // rd field in memory stage
+        mem_rs2,                // rs2 field in memory stage
         // Memory stage
         wb_rd;                  // rd field in memory stage
 
@@ -93,13 +95,16 @@ sc_signal<bool>
 
         // Decode ----------------------------------------------------------
 sc_signal< sc_uint<2> >
-        ex_wb_ctrl,
-        mem_wb_ctrl,
+        ex_wb_ctrl,                 // WB in ID/EX
+        ex_to_mem_wb,               // WB from ID/EX to EX/MEM
+        mem_to_wb,                  // WB from EX/MEM to MEM/WB
         b_opcode;                   // 0: beq  1: bne  2: blt  3: bge
 sc_signal< sc_uint<5> >
-        id_ex_cntr;
+        ex_mem_ctrl,                // M in ID/EX
+        ex_to_mem_m;                // M from ID/EX to EX/MEM
+sc_signal< sc_uint<4> >
+        ex_ctrl;                    // EX in ID/EX
 sc_signal< sc_uint<3> >
-        ex_mem_ctrl,
         mem_mem_ctrl;
 sc_signal<bool>
         b_cond,                     // condition for branch (output dbranch)
@@ -129,7 +134,8 @@ sc_signal< sc_uint<3> >
         mem_data_size;              // Bit 0: 1 - signed, 0 - unsigned / Bit 1-2: 0 - byte; 1 - half; 2 - word
 sc_signal< bool >
         mem_rd_en,                     // 0: disable, 1: enable
-        mem_wr_en;                     // 0: disable, 1: enable
+        mem_wr_en,                     // 0: disable, 1: enable
+        sel_mux_mem;                   // Select Mux Mem input
 
 
         // WriteBack -------------------------------------------------------

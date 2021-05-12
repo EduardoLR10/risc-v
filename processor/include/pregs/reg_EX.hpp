@@ -12,7 +12,7 @@ SC_MODULE (reg_EX){
     sc_in< sc_uint<2> > id_wb_ctrl;
     sc_out< bool > alu_src_A, alu_src_B;
     sc_out< sc_uint<2> > alu_op;
-    sc_out< sc_uint<3> > mem_ctrl;
+    sc_out< sc_uint<5> > mem_ctrl;
     sc_out< sc_uint<2> > wb_ctrl;
 
     // data
