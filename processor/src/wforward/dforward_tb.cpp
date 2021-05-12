@@ -1,6 +1,6 @@
-#include "wforward/wforward_tb.hpp"
+#include "dforward/dforward_tb.hpp"
 
-void wforward_tb::aciona() {
+void dforward_tb::aciona() {
     rs1 = 1; rs2 = 0; rd = 1;
     wait(1, SC_NS);
     std::cout << "rs1 = " << std::setw(W) << rs1.read();
