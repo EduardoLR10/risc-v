@@ -10,8 +10,8 @@ SC_MODULE (reg_EX){
     sc_in< sc_uint<4> > id_ex_ctrl;
     sc_in< sc_uint<5> > id_mem_ctrl;
     sc_in< sc_uint<2> > id_wb_ctrl;
-    sc_out< bool > alu_src_A, alu_src_B;
-    sc_out< sc_uint<2> > alu_op;
+    sc_out< bool > alu_op, alu_src_B;
+    sc_out< sc_uint<2> > alu_src_A;
     sc_out< sc_uint<5> > mem_ctrl;
     sc_out< sc_uint<2> > wb_ctrl;
 
@@ -36,6 +36,7 @@ SC_MODULE (reg_EX){
 private:
     sc_uint<SIZE> imm_buf, regA_buf, regB_buf, pc_buf;
     sc_uint<5> rs1_buf, rs2_buf, rd_buf;
+    sc_uint<4> ex_ctrl_buf;
     sc_uint<7> funct7_buf;
     sc_uint<3> funct3_buf;
 };

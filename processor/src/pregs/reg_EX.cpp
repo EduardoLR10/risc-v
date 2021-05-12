@@ -18,7 +18,11 @@ void reg_EX::load() {
         pc_buf = id_pc.read();
         funct3_buf = id_funct3.read();
         funct7_buf = id_funct7.read();
+        ex_ctrl_buf = id_ex_ctrl.read();
     }
+    alu_op.write(ex_ctrl_buf[3]);
+    alu_src_A.write(ex_ctrl_buf(0, 1));
+    alu_src_B.write(ex_ctrl_buf[2]);
     mem_ctrl.write(id_mem_ctrl.read());
     wb_ctrl.write(id_wb_ctrl.read());
     ex_imm.write(imm_buf); ex_regA.write(regA_buf); ex_regB.write(regB_buf);

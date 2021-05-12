@@ -118,7 +118,7 @@ SC_MODULE(RISCV)
     FETCH_MUX.inputs.at(0)(next_pc);
     FETCH_MUX.inputs.at(1)(pc_branch);
     sc_signal<int> fetch_sel_in;
-    fetch_sel_in.write((int) (is_branch.read() && b_cond.read()) || (is_jal.read()));
+    fetch_sel_in.write((int) (is_branch.read() && b_cond.read()) || (is_jalx.read()));
     FETCH_MUX.sel(fetch_sel_in);
     FETCH_MUX.Z(pc_in);
 
@@ -131,7 +131,7 @@ SC_MODULE(RISCV)
     IF_ID.next_pc(next_pc);
     IF_ID.clk(clock);
     IF_ID.wren(wren_reg_ID);
-    IF_ID.rst(rst_reg_ID);
+    IF_ID.rst(id_flush);
     
     // stage 2
 
@@ -201,7 +201,7 @@ SC_MODULE(RISCV)
     ID_EX.id_rs1(id_rs1);
     ID_EX.id_rs2(id_rs2);
     ID_EX.id_rd(id_rd);
-    ID_EX.id_imm(id_imm_ws);
+    ID_EX.id_imm(return_addr);
     ID_EX.id_regA(breg_ra);
     ID_EX.id_regB(breg_rb);
     ID_EX.id_pc(id_pc);
@@ -209,7 +209,7 @@ SC_MODULE(RISCV)
     // ID_EX.wren(one);
     // ID_EX.rst(zero);
     ID_EX.wren(true_sig);
-    ID_EX.rst(false_sig);
+    ID_EX.rst(ex_flush);
     sc_signal<sc_uint<7>> id_ex_funct7;
     sc_signal<sc_uint<3>> id_ex_funct3;
     id_ex_funct7.write(((id_instruction.read())(31, 25)));
@@ -232,6 +232,9 @@ SC_MODULE(RISCV)
     ID_EX.ex_funct3(ex_funct3);
     ID_EX.mem_ctrl(ex_to_mem_m);
     ID_EX.wb_ctrl(ex_to_mem_wb);
+    ID_EX.alu_op(alu_op);
+    ID_EX.alu_src_A(sel_alu_A);
+    ID_EX.alu_src_B(sel_alu_B);
     
     EXECUTE_MUX_FORWARDA.inputs.at(0)(ex_ra);
     EXECUTE_MUX_FORWARDA.inputs.at(1)(wb_mux_data);
