@@ -1,6 +1,6 @@
-#include "wforward/wforward.hpp"
+#include "dforward/dforward.hpp"
 
-void wforward::proc(){
+void dforward::proc(){
     if(rd.read() == rs1.read()){
         rAOut.write(true);
     } else {
