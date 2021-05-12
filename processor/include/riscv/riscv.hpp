@@ -2,14 +2,14 @@
 #include "adder/adder.hpp"
 #include "breg/breg.hpp"
 #include "dbranch/dbranch.hpp"
-#include "wforward/wforward.hpp"
+#include "dforward/dforward.hpp"
 #include "genImm32/genImm32.hpp"
 #include "pc/pc.hpp"
 #include "mux/mux.hpp"
 #include "control/control.hpp"
 #include "dataMem/dataMem.hpp"
 #include "ula/ula.hpp"
-#include "forward/eforward.hpp"
+#include "eforward/eforward.hpp"
 #include "instruction_memory/instruction_memory.hpp"
 #include "aluControl/aluControl.hpp"
 #include "pregs/reg_EX.hpp"
@@ -39,12 +39,12 @@ SC_MODULE(RISCV)
   mux<sc_uint<SIZE>, 2> DECODE_MUX_DBRANCH_B;
   mux<sc_uint<SIZE>, 2> DECODE_MUX_RETURN_ADDRESS;
   mux<sc_uint<SIZE>, 2> DECODE_MUX_ADDER;
-  wforward DECODE_DFORWARD;
+  dforward DECODE_DFORWARD;
   reg_EX ID_EX;
 
   // stage 3 : EXECUTE
   ula EXECUTE_ULA;
-  eforward EXECUTE_FORWARD;
+  eforward EXECUTE_EFORWARD;
   aluControl EXECUTE_ALUCONTROL;
   mux<sc_uint<SIZE>, 3> EXECUTE_MUX_FORWARDA;
   mux<sc_uint<SIZE>, 3> EXECUTE_MUX_FORWARDB;
@@ -75,7 +75,7 @@ SC_MODULE(RISCV)
     DECODE_MUX_DBRANCH_A("DECODE_MUX_DBRANCH_A"), DECODE_MUX_DBRANCH_B("DECODE_MUX_DBRANCH_B"), DECODE_MUX_RETURN_ADDRESS("DECODE_MUX_BREG"),
     DECODE_MUX_ADDER("DECODE_MUX_ADDER"), DECODE_DFORWARD("DECODE_WFORWARD"), ID_EX("ID_EX"),
     // stage 3
-    EXECUTE_ULA("EXECUTE_ULA"), EXECUTE_FORWARD("EXECUTE_FORWARD"), EXECUTE_ALUCONTROL("EXECUTE_ALUCONTROL"),
+    EXECUTE_ULA("EXECUTE_ULA"), EXECUTE_EFORWARD("EXECUTE_FORWARD"), EXECUTE_ALUCONTROL("EXECUTE_ALUCONTROL"),
     EXECUTE_MUX_FORWARDA("EXECUTE_MUX_FORWARDA"), EXECUTE_MUX_FORWARDB("EXECUTE_MUX_FORWARDB"),
     EXECUTE_MUX_ALUA("EXECUTE_MUX_ALUA"), EXECUTE_MUX_ALUB("EXECUTE_MUX_ALUB"), EX_MEM("EX_MEM"),
     // stage 4
@@ -267,14 +267,14 @@ SC_MODULE(RISCV)
     EXECUTE_MUX_ALUB.sel(execute_mux_alub_sel);
     EXECUTE_MUX_ALUB.Z(mux_alu_b);
 
-    EXECUTE_FORWARD.ID_EX_rs1(ex_rs1);
-    EXECUTE_FORWARD.ID_EX_rs2(ex_rs2);
-    EXECUTE_FORWARD.EX_MEM_rd(mem_rd);
-    EXECUTE_FORWARD.MEM_WB_rd(wb_rd);
-    EXECUTE_FORWARD.EX_MEM_write(mem_wr_en);
-    EXECUTE_FORWARD.MEM_WB_write(f_breg_wr);
-    EXECUTE_FORWARD.forwardA(forward_a);
-    EXECUTE_FORWARD.forwardB(forward_b);
+    EXECUTE_EFORWARD.ID_EX_rs1(ex_rs1);
+    EXECUTE_EFORWARD.ID_EX_rs2(ex_rs2);
+    EXECUTE_EFORWARD.EX_MEM_rd(mem_rd);
+    EXECUTE_EFORWARD.MEM_WB_rd(wb_rd);
+    EXECUTE_EFORWARD.EX_MEM_write(mem_wr_en);
+    EXECUTE_EFORWARD.MEM_WB_write(f_breg_wr);
+    EXECUTE_EFORWARD.forwardA(forward_a);
+    EXECUTE_EFORWARD.forwardB(forward_b);
 
     EXECUTE_ALUCONTROL.ex_funct7(ex_funct7);
     EXECUTE_ALUCONTROL.ex_funct3(ex_funct3);

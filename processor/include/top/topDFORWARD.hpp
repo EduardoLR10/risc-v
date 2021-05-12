@@ -10,7 +10,7 @@ SC_MODULE ( topDFORWARD ) {
     sc_signal< sc_uint<5> > rs1, rs2, rd;
 	sc_signal< bool > rAOut, rBOut;
 
-    SC_CTOR(topWFORWARD): DFORWARD("DFORWARD"), DFORWARD_tb("DFORWARD_tb") {
+    SC_CTOR(topDFORWARD): DFORWARD("DFORWARD"), DFORWARD_tb("DFORWARD_tb") {
 		DFORWARD.rs1(rs1);		    DFORWARD_tb.rs1(rs1);
         DFORWARD.rs2(rs2);          DFORWARD_tb.rs2(rs2);
         DFORWARD.rd(rd);            DFORWARD_tb.rd(rd);
