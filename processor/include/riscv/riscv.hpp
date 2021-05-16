@@ -133,7 +133,7 @@ SC_MODULE(RISCV)
     // FETCH_ADDER.Cout();  // ignore
 
     FETCH_PC.pc_in(pc_in);
-    FETCH_PC.ld_pc(wren_pc);
+    FETCH_PC.ld_pc(true_sig);
     FETCH_PC.clock(clock);
     FETCH_PC.pc_out(program_counter);
 
@@ -150,7 +150,7 @@ SC_MODULE(RISCV)
     IF_ID.inst(ft_instruction);
     IF_ID.next_pc(next_pc);
     IF_ID.clk(clock);
-    IF_ID.wren(wren_reg_ID);
+    IF_ID.wren(true_sig);
     IF_ID.rst(id_flush);
     
     // stage 2
@@ -161,7 +161,6 @@ SC_MODULE(RISCV)
     IF_ID.id_rs1(id_rs1);
     IF_ID.id_rs2(id_rs2);
     IF_ID.id_rd(id_rd);
-    IF_ID.id_ins_code(id_ins_code);
 
     DECODE_BREG.rs1(id_rs1);
     DECODE_BREG.rs2(id_rs2);
@@ -171,8 +170,9 @@ SC_MODULE(RISCV)
     DECODE_BREG.rb(breg_rb);
     DECODE_BREG.wren(f_breg_wr);
     DECODE_BREG.clk(clock);
-    DECODE_MUX_RETURN_ADDRESS.inputs.at(0)(id_imm_ws);
-    DECODE_MUX_RETURN_ADDRESS.inputs.at(1)(id_next_pc);
+    
+    DECODE_MUX_RETURN_ADDRESS.inputs.at(0)(id_next_pc);
+    DECODE_MUX_RETURN_ADDRESS.inputs.at(1)(id_imm_ws);
     DECODE_MUX_RETURN_ADDRESS.sel(decode_mux_ra_sel);
     DECODE_MUX_RETURN_ADDRESS.Z(return_addr);
 
@@ -218,8 +218,6 @@ SC_MODULE(RISCV)
     ID_EX.id_regB(breg_rb);
     ID_EX.id_pc(id_pc);
     ID_EX.clk(clock);
-    // ID_EX.wren(one);
-    // ID_EX.rst(zero);
     ID_EX.wren(true_sig);
     ID_EX.rst(ex_flush);
     ID_EX.id_funct7(id_ex_funct7);
@@ -285,7 +283,6 @@ SC_MODULE(RISCV)
     EXECUTE_ULA.B(mux_alu_b);
     EXECUTE_ULA.Z(alu_out);
     EXECUTE_ULA.opcode(opcode_alu);
-    EXECUTE_ULA.zero(zero_alu);
 
     EX_MEM.ex_rd(ex_rd);
     EX_MEM.ex_rs2(ex_rs2);
@@ -294,8 +291,6 @@ SC_MODULE(RISCV)
     EX_MEM.ex_mem_ctrl(ex_to_mem_m);
     EX_MEM.ex_wb_ctrl(ex_to_mem_wb);
     EX_MEM.clk(clock);
-    // EX_MEM.wren(one);
-    // EX_MEM.rst(zero);
     EX_MEM.wren(true_sig);
     EX_MEM.rst(false_sig);
 
@@ -319,7 +314,6 @@ SC_MODULE(RISCV)
     DATA_MEMORY.wr_en(mem_wr_en);
     DATA_MEMORY.d_size(mem_data_size);
     DATA_MEMORY.mem_addr(mdata);
-    DATA_MEMORY.imm(data_mem_imm_zero);
     DATA_MEMORY.wr_data(mem_alu_out);
     DATA_MEMORY.mem_out(dm_out);
     DATA_MEMORY.clk(clock);
@@ -335,6 +329,7 @@ SC_MODULE(RISCV)
     MEM_MFORWARD.mem_rs2(mem_rs2);
     MEM_MFORWARD.wb_rd(wb_rd);
     MEM_MFORWARD.f_breg_wr(f_breg_wr);
+    MEM_MFORWARD.mem_wr_en(mem_wr_en);
     MEM_MFORWARD.sel_mux_mem(sel_mux_mem);
 
     // stage 5
@@ -353,7 +348,7 @@ SC_MODULE(RISCV)
     // controller
 
     CONTROLLER.instruction(id_instruction);
-    CONTROLLER.rst_reg_ID(rst_reg_ID);
+    //CONTROLLER.rst_reg_ID(rst_reg_ID);
     CONTROLLER.id_flush(id_flush);
     CONTROLLER.is_jal(is_jal);
     CONTROLLER.is_jalx(is_jalx);
