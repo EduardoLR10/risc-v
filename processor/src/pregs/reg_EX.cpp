@@ -21,7 +21,7 @@ void reg_EX::load() {
         ex_ctrl_buf = id_ex_ctrl.read();
     }
     alu_op.write(ex_ctrl_buf[3]);
-    alu_src_A.write(ex_ctrl_buf(0, 1));
+    alu_src_A.write(ex_ctrl_buf(1, 0));
     alu_src_B.write(ex_ctrl_buf[2]);
     mem_ctrl.write(id_mem_ctrl.read());
     wb_ctrl.write(id_wb_ctrl.read());
