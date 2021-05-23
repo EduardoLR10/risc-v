@@ -17,7 +17,7 @@ SC_MODULE(InstructionMemory) {
   void load_contents(std::string filename);
   std::vector<char> readBytes(std::string filename);
 
-  sc_lv<32> data[MEMSIZE];
+  std::vector<sc_uint<32>> data;
 
   SC_CTOR(InstructionMemory) {
     SC_METHOD(read_data);

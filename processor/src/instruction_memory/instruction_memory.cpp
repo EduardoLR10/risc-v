@@ -22,10 +22,11 @@ void InstructionMemory::load_contents(std::string filename)
   uint32_t i;
   for (i = 0; i < 4*MEMSIZE && i < bytes.size(); i += 4) {
     // read for bytes from input
-    data[i/4] = (((uint8_t) bytes[i])   << 24)
-              + (((uint8_t) bytes[i+1]) << 16)
-              + (((uint8_t) bytes[i+2]) << 8 )
-              + (((uint8_t) bytes[i+3])      );
+    sc_uint<32> word = (((uint8_t) bytes[i])        )
+                     + (((uint8_t) bytes[i+1]) << 8 )
+                     + (((uint8_t) bytes[i+2]) << 16)
+                     + (((uint8_t) bytes[i+3]) << 24);
+    data.push_back(word);
   }
 }
 
