@@ -6,6 +6,7 @@
 
 SC_MODULE (dforward) {
     sc_in< sc_uint<5> > rs1, rs2, rd;
+    sc_in< bool > mem_wr_en;
     sc_out<bool> rAOut, rBOut;
 
     void proc(void);

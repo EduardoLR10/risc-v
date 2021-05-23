@@ -1,0 +1,127 @@
+src/control/control.cpp: In member function ‘void control::decode()’:
+src/control/control.cpp:112:30: warning: left operand of comma operator has no effect [-Wunused-value]
+  112 |                     auxEx = (0, ALU_B_IMM, ALU_A_ZERO);
+      |                              ^
+src/control/control.cpp:115:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  115 |                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
+      |                                    ^~~~~~~~~~~~
+src/control/control.cpp:118:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  118 |                     ex_ctrl.write((0, ALU_B_IMM, ALU_A_PC));
+      |                                    ^
+src/control/control.cpp:120:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  120 |                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
+      |                                    ^~~~~~~~~~~~
+src/control/control.cpp:130:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  130 |         case I_lb:  wb_ctrl.write((SEL_MEM_DATA, WRITE_BREG));
+      |                                    ^~~~~~~~~~~~
+src/control/control.cpp:131:37: warning: left operand of comma operator has no effect [-Wunused-value]
+  131 |                     mem_ctrl.write((MEM_READ, NO_WRITE, SIGNED_DATA, BYTE_SIZE));
+      |                                     ^~~~~~~~
+src/control/control.cpp:131:47: warning: right operand of comma operator has no effect [-Wunused-value]
+  131 |                     mem_ctrl.write((MEM_READ, NO_WRITE, SIGNED_DATA, BYTE_SIZE));
+      |                                               ^~~~~~~~
+src/control/control.cpp:132:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  132 |                     ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+      |                                    ^
+src/control/control.cpp:134:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  134 |         case I_lh:  wb_ctrl.write((SEL_MEM_DATA, WRITE_BREG));
+      |                                    ^~~~~~~~~~~~
+src/control/control.cpp:135:37: warning: left operand of comma operator has no effect [-Wunused-value]
+  135 |                     mem_ctrl.write((MEM_READ, NO_WRITE, SIGNED_DATA, HALF_SIZE));
+      |                                     ^~~~~~~~
+src/control/control.cpp:135:47: warning: right operand of comma operator has no effect [-Wunused-value]
+  135 |                     mem_ctrl.write((MEM_READ, NO_WRITE, SIGNED_DATA, HALF_SIZE));
+      |                                               ^~~~~~~~
+src/control/control.cpp:136:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  136 |                     ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+      |                                    ^
+src/control/control.cpp:138:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  138 |         case I_lhu: wb_ctrl.write((SEL_MEM_DATA, WRITE_BREG));
+      |                                    ^~~~~~~~~~~~
+src/control/control.cpp:139:37: warning: left operand of comma operator has no effect [-Wunused-value]
+  139 |                     mem_ctrl.write((MEM_READ, NO_WRITE, UNSIGNED_DATA, HALF_SIZE));
+      |                                     ^~~~~~~~
+src/control/control.cpp:139:47: warning: right operand of comma operator has no effect [-Wunused-value]
+  139 |                     mem_ctrl.write((MEM_READ, NO_WRITE, UNSIGNED_DATA, HALF_SIZE));
+      |                                               ^~~~~~~~
+src/control/control.cpp:140:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  140 |                     ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+      |                                    ^
+src/control/control.cpp:142:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  142 |         case I_lw:  wb_ctrl.write((SEL_MEM_DATA, WRITE_BREG));
+      |                                    ^~~~~~~~~~~~
+src/control/control.cpp:143:37: warning: left operand of comma operator has no effect [-Wunused-value]
+  143 |                     mem_ctrl.write((MEM_READ, NO_WRITE, SIGNED_DATA, WORD_SIZE));
+      |                                     ^~~~~~~~
+src/control/control.cpp:143:47: warning: right operand of comma operator has no effect [-Wunused-value]
+  143 |                     mem_ctrl.write((MEM_READ, NO_WRITE, SIGNED_DATA, WORD_SIZE));
+      |                                               ^~~~~~~~
+src/control/control.cpp:144:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  144 |                     ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+      |                                    ^
+src/control/control.cpp:146:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  146 |         case I_lbu: wb_ctrl.write((SEL_MEM_DATA, WRITE_BREG));
+      |                                    ^~~~~~~~~~~~
+src/control/control.cpp:147:37: warning: left operand of comma operator has no effect [-Wunused-value]
+  147 |                     mem_ctrl.write((MEM_READ, NO_WRITE, UNSIGNED_DATA, BYTE_SIZE));
+      |                                     ^~~~~~~~
+src/control/control.cpp:147:47: warning: right operand of comma operator has no effect [-Wunused-value]
+  147 |                     mem_ctrl.write((MEM_READ, NO_WRITE, UNSIGNED_DATA, BYTE_SIZE));
+      |                                               ^~~~~~~~
+src/control/control.cpp:148:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  148 |                     ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+      |                                    ^
+src/control/control.cpp:151:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  151 |                     ex_ctrl.write((0, ALU_B_IMM, ALU_A_ZERO));
+      |                                    ^
+src/control/control.cpp:152:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  152 |                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
+      |                                    ^~~~~~~~~~~~
+src/control/control.cpp:156:37: warning: left operand of comma operator has no effect [-Wunused-value]
+  156 |                      ex_ctrl.write((0, ALU_B_IMM, ALU_A_ZERO));
+      |                                     ^
+src/control/control.cpp:157:37: warning: left operand of comma operator has no effect [-Wunused-value]
+  157 |                      wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
+      |                                     ^~~~~~~~~~~~
+src/control/control.cpp:159:35: warning: left operand of comma operator has no effect [-Wunused-value]
+  159 |         case I_sb: ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+      |                                   ^
+src/control/control.cpp:160:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  160 |                    mem_ctrl.write((NO_READ, MEM_WRITE, SIGNED_DATA, BYTE_SIZE));
+      |                                    ^~~~~~~
+src/control/control.cpp:160:45: warning: right operand of comma operator has no effect [-Wunused-value]
+  160 |                    mem_ctrl.write((NO_READ, MEM_WRITE, SIGNED_DATA, BYTE_SIZE));
+      |                                             ^~~~~~~~~
+src/control/control.cpp:162:35: warning: left operand of comma operator has no effect [-Wunused-value]
+  162 |         case I_sh: ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+      |                                   ^
+src/control/control.cpp:163:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  163 |                    mem_ctrl.write((NO_READ, MEM_WRITE, SIGNED_DATA, HALF_SIZE));
+      |                                    ^~~~~~~
+src/control/control.cpp:163:45: warning: right operand of comma operator has no effect [-Wunused-value]
+  163 |                    mem_ctrl.write((NO_READ, MEM_WRITE, SIGNED_DATA, HALF_SIZE));
+      |                                             ^~~~~~~~~
+src/control/control.cpp:165:35: warning: left operand of comma operator has no effect [-Wunused-value]
+  165 |         case I_sw: ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+      |                                   ^
+src/control/control.cpp:166:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  166 |                    mem_ctrl.write((NO_READ, MEM_WRITE, SIGNED_DATA, WORD_SIZE));
+      |                                    ^~~~~~~
+src/control/control.cpp:166:45: warning: right operand of comma operator has no effect [-Wunused-value]
+  166 |                    mem_ctrl.write((NO_READ, MEM_WRITE, SIGNED_DATA, WORD_SIZE));
+      |                                             ^~~~~~~~~
+src/control/control.cpp:177:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  177 |                     ex_ctrl.write((1, ALU_B_IMM, ALU_A_RA));
+      |                                    ^
+src/control/control.cpp:178:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  178 |                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
+      |                                    ^~~~~~~~~~~~
+src/control/control.cpp:190:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  190 |                     ex_ctrl.write((1, ALU_B_RB, ALU_A_RA));
+      |                                    ^
+src/control/control.cpp:191:36: warning: left operand of comma operator has no effect [-Wunused-value]
+  191 |                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
+      |                                    ^~~~~~~~~~~~
+src/control/control.cpp:92:13: warning: unused variable ‘aux’ [-Wunused-variable]
+   92 |     int32_t aux;
+      |             ^~~

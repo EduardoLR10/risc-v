@@ -11,7 +11,7 @@
 SC_MODULE(control) {
     sc_in< sc_uint<SIZE> > instruction;
     // Fetch
-    sc_out<bool> rst_reg_ID;
+    //sc_out<bool> rst_reg_ID;
     // Decode
     sc_out<bool> id_flush;
     sc_out<bool> is_jal, is_jalx, is_jalr, is_branch;
@@ -49,18 +49,18 @@ private:
     const sc_uint<2> ALU_A_RA = 2;      // 2
     const bool ALU_B_RB = false;        // false
     const bool ALU_B_IMM = true;        // true
-    const bool NO_WRITE = false;        // false
-    const bool NO_READ = false;         // false
-    const bool MEM_READ = true;         // true
-    const bool MEM_WRITE = true;        // true
     const bool SEL_MEM_DATA = true;     // true
     const bool SEL_ALU_DATA = true;     // false
     const bool WRITE_BREG = true;       // true
+    const bool NO_WRITE = false;        // false
     const bool SIGNED_DATA = true;      // true
     const bool UNSIGNED_DATA = false;   // false
     const sc_uint<2> BYTE_SIZE = 0;     // 0
     const sc_uint<2> HALF_SIZE = 1;     // 1
     const sc_uint<2> WORD_SIZE = 2;     // 2
+    const bool NO_READ = false;         // false
+    const bool MEM_READ = true;         // true
+    const bool MEM_WRITE = true;        // true
 };
 
 #endif //RISCV_PIPE_CONTROL_RV_H

@@ -98,7 +98,8 @@ void control::decode() {
     ins_code = get_instr_code(opcode, funct3, funct7);
 
     // reset all outputs
-    rst_reg_ID = 0;         is_jal = 0;     is_jalr = 0;
+    //rst_reg_ID = 0;
+    is_jal = 0;     is_jalr = 0;
     id_flush = 0;            b_code = 0;     is_branch = 0;
     ex_flush = false;
     ex_ctrl = 0;
