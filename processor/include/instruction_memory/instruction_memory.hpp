@@ -6,6 +6,7 @@
 #include <iterator>
 #include <vector>
 #include "top/macros.hpp"
+#include "pregs/reg_ID.hpp"
 
 #define MEMSIZE 256 // in words
 
@@ -17,7 +18,7 @@ SC_MODULE(InstructionMemory) {
   void load_contents(std::string filename);
   std::vector<char> readBytes(std::string filename);
 
-  std::vector<sc_uint<32>> data;
+  sc_uint<32> data[MEMSIZE];
 
   SC_CTOR(InstructionMemory) {
     SC_METHOD(read_data);

@@ -3,7 +3,7 @@
 void dataMem::store() {
   if(wr_en == 1) {
     // Read values
-    int32_t kte = imm.read();
+    int32_t kte = 0;
     sc_uint<3> data_size = d_size.read();
     int32_t write_data = wr_data.read();
 
@@ -122,7 +122,7 @@ void dataMem::store() {
 void dataMem::load() {
   if(rd_en == 1){
     // Read values
-    int32_t kte = imm.read();
+    int32_t kte = 0;
     sc_uint<3> data_size = d_size.read();
 
     // Auxiliary
@@ -156,7 +156,7 @@ void dataMem::load() {
         // Get byte position
         position = address - load_addr;
 
-        if(data_size(0,0) == 1) {
+        if(data_size[0] == 1) {
           // SIGNED (LB)
           data = memory[load_addr/4];
 
@@ -188,7 +188,7 @@ void dataMem::load() {
             load_addr -= 2;
         }
 
-        if(data_size(0,0) == 1) {
+        if(data_size[0] == 1) {
           // SIGNED (LH)
           data = memory[load_addr/4];
 

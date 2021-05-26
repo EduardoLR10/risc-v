@@ -13,12 +13,16 @@ SC_MODULE(breg) {
     void write(void);
     void read(void);
 
+	void dump_breg();
+
 	SC_CTOR(breg) {
 		SC_METHOD(write);
 		sensitive << clk.pos();
 		
 		SC_METHOD(read);
 		sensitive << rs1 << rs2 << rd << d_in << wren << clk;
+
+		for (int i=0; i<32; bank[i]=(sc_uint<SIZE>)i) i++;       // initialize for debug
 	}
 	
 private:

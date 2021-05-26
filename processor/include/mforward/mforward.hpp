@@ -15,7 +15,7 @@ SC_MODULE(MForward) {
 
   SC_CTOR(MForward) {
     SC_METHOD(proc);
-    sensitive << mem_rs2 << wb_rd << f_breg_wr << mem_wr_en;
+    sensitive << mem_rs2 << wb_rd << f_breg_wr;
   }
 };
 

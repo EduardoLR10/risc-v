@@ -9,8 +9,6 @@ SC_MODULE (dataMem) {
   sc_in< bool > clk, rd_en, wr_en;
   sc_in< sc_uint<3> > d_size;
   sc_in< sc_uint<SIZE> > mem_addr;
-
-  sc_in< sc_uint<IMMSIZE> > imm;
   sc_in< sc_uint<SIZE> > wr_data;
   sc_out< sc_uint<SIZE> > mem_out;
 
@@ -24,7 +22,7 @@ SC_MODULE (dataMem) {
     sensitive << clk.pos();
 
     SC_METHOD(load);
-    sensitive << rd_en << d_size << mem_addr << imm;
+    sensitive << rd_en << d_size << mem_addr;
   }
 
   private:

@@ -4,6 +4,8 @@
 
 #include "control/control.hpp"
 
+extern sc_signal< sc_uint<32> > id_pc;
+
 INSTRUCTIONS control::get_instr_code(uint32_t opcode, uint32_t funct3, uint32_t funct7) {
     switch (opcode) {
         case LUI:   return I_lui;
@@ -78,9 +80,10 @@ INSTRUCTIONS control::get_instr_code(uint32_t opcode, uint32_t funct3, uint32_t 
             }
             break;
 //        case ECALL:     return I_ecall;
+        case NOP:
+            return I_nop;
         default:
-            //printf("\n\nInstrucao Invalida (PC = %08x RI = %08x)\n", pc, ri);
-            std::cout << "Deu ruim" << std::endl;
+            printf("\n\nInstrucao Invalida: %x\n", opcode);
             break;
     }
     return I_nop;
@@ -89,18 +92,21 @@ INSTRUCTIONS control::get_instr_code(uint32_t opcode, uint32_t funct3, uint32_t 
 void control::decode() {
     INSTRUCTIONS ins_code;
     uint32_t opcode, funct3, funct7;
-    int32_t aux;
+
+    sc_uint<1> scu_0 = 0;
+    sc_uint<1> scu_1 = 1;
 
     sc_uint<32> ins = instruction.read();
     opcode = ins.range(6,0);
     funct3 = ins.range(14, 12);
     funct7 = ins.range(31, 25);
     ins_code = get_instr_code(opcode, funct3, funct7);
+    sc_uint<4> ex_ctrl_buf;
 
     // reset all outputs
     //rst_reg_ID = 0;
-    is_jal = 0;     is_jalr = 0;
-    id_flush = 0;            b_code = 0;     is_branch = 0;
+    is_jalx = 0;     is_jalr = 0;
+    id_flush = 0;    b_code = 0;     is_branch = 0;
     ex_flush = false;
     ex_ctrl = 0;
     mem_ctrl = 0;
@@ -108,12 +114,13 @@ void control::decode() {
 
     switch (ins_code) {
         case I_lui:         // breg[ic.rd] = ic.imm20_u;
-                    ex_ctrl.write((0, ALU_B_IMM, ALU_A_ZERO));
+                    ex_ctrl_buf = (SCU_ZERO, ALU_B_IMM, ALU_A_ZERO);
+                    ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_ZERO));
                     mem_ctrl.write(0);
                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
                     break;
         case I_auipc:       // breg[ic.rd] = ic.imm20_u + ic.pc;
-                    ex_ctrl.write((0, ALU_B_IMM, ALU_A_PC));
+                    ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_PC));
                     mem_ctrl.write(0);
                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
                     break;
@@ -126,42 +133,42 @@ void control::decode() {
         //case I_bgeu:	if ((uint32_t)breg[ic.rs1] >= (uint32_t)breg[ic.rs2])
         //        pc = ic.pc + ic.imm13;						break;
         case I_lb:  wb_ctrl.write((SEL_MEM_DATA, WRITE_BREG));
-                    mem_ctrl.write((MEM_READ, NO_WRITE, SIGNED_DATA, BYTE_SIZE));
-                    ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+                    mem_ctrl.write((BYTE_SIZE, SIGNED_DATA, NO_WRITE, MEM_READ));
+                    ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_RA));
                     break;
         case I_lh:  wb_ctrl.write((SEL_MEM_DATA, WRITE_BREG));
-                    mem_ctrl.write((MEM_READ, NO_WRITE, SIGNED_DATA, HALF_SIZE));
-                    ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+                    mem_ctrl.write((HALF_SIZE, SIGNED_DATA, NO_WRITE, MEM_READ));
+                    ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_RA));
                     break;
         case I_lhu: wb_ctrl.write((SEL_MEM_DATA, WRITE_BREG));
-                    mem_ctrl.write((MEM_READ, NO_WRITE, UNSIGNED_DATA, HALF_SIZE));
-                    ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+                    mem_ctrl.write((HALF_SIZE, UNSIGNED_DATA, NO_WRITE, MEM_READ));
+                    ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_RA));
                     break;
         case I_lw:  wb_ctrl.write((SEL_MEM_DATA, WRITE_BREG));
-                    mem_ctrl.write((MEM_READ, NO_WRITE, SIGNED_DATA, WORD_SIZE));
-                    ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+                    mem_ctrl.write((WORD_SIZE, SIGNED_DATA, NO_WRITE, MEM_READ));
+                    ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_RA));
                     break;
         case I_lbu: wb_ctrl.write((SEL_MEM_DATA, WRITE_BREG));
-                    mem_ctrl.write((MEM_READ, NO_WRITE, UNSIGNED_DATA, BYTE_SIZE));
-                    ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
+                    mem_ctrl.write((BYTE_SIZE, UNSIGNED_DATA, NO_WRITE, MEM_READ));
+                    ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_RA));
                     break;
         case I_jal: is_jalx.write(true);
-                    ex_ctrl.write((0, ALU_B_IMM, ALU_A_ZERO));
+                    ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_ZERO));
                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
                     break;
         case I_jalr: is_jalx.write(true);
                      is_jalr.write(true);
-                     ex_ctrl.write((0, ALU_B_IMM, ALU_A_ZERO));
+                     ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_ZERO));
                      wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
                      break;
-        case I_sb: ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
-                   mem_ctrl.write((NO_READ, MEM_WRITE, SIGNED_DATA, BYTE_SIZE));
+        case I_sb: ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_RA));
+                   mem_ctrl.write((BYTE_SIZE, SIGNED_DATA, MEM_WRITE, NO_READ));
                    break;
-        case I_sh: ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
-                   mem_ctrl.write((NO_READ, MEM_WRITE, SIGNED_DATA, HALF_SIZE));
+        case I_sh: ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_RA));
+                   mem_ctrl.write((HALF_SIZE, SIGNED_DATA, MEM_WRITE, NO_READ));
                    break;
-        case I_sw: ex_ctrl.write((0, ALU_B_IMM, ALU_A_RA));
-                   mem_ctrl.write((NO_READ, MEM_WRITE, SIGNED_DATA, WORD_SIZE));
+        case I_sw: ex_ctrl.write((SCU_ZERO, ALU_B_IMM, ALU_A_RA));
+                   mem_ctrl.write((WORD_SIZE, SIGNED_DATA, MEM_WRITE, NO_READ));
                    break;
         case I_addi:
         case I_ori:
@@ -172,7 +179,9 @@ void control::decode() {
         case I_slli:
         case I_srai:
         case I_srli:
-                    ex_ctrl.write((1, ALU_B_IMM, ALU_A_RA));
+                    ex_ctrl.write((SCU_ONE, ALU_B_IMM, ALU_A_RA));
+                    //std::cout << std::setw(8) << "PC : " << std::setw(8) << hex << id_pc.read() << endl;
+                    //std::cout << "ex_ctrl: "  << std::setw(6) << ex_ctrl.read().to_string(SC_BIN) << endl;
                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
                     break;
         case I_sub:
@@ -185,13 +194,14 @@ void control::decode() {
         case I_and:
         case I_sra:
         case I_srl:
-                    ex_ctrl.write((1, ALU_B_RB, ALU_A_RA));
+                    ex_ctrl.write((SCU_ONE, ALU_B_RB, ALU_A_RA));
                     wb_ctrl.write((SEL_ALU_DATA, WRITE_BREG));
                     break;
+        case I_nop:
+            break;
         default:
-            //printf("Invalid Instruction (PC = %08x RI = %08x)\n", pc, ri);
-            std::cout << "Deu ruim" << std::endl;
-            //exit(0);
+            printf("Invalid Instruction (PC = %08x)\n", ins_code);
+            exit(0);
             break;
 
     }

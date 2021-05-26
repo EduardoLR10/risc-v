@@ -1,25 +1,27 @@
-#ifndef __ULA_H__
-#define __ULA_H__
+#ifndef ULA_H
+#define ULA_H
 
 #include <systemc.h>
 #include "top/macros.hpp"
 
-enum OPCODE {
-    ALU_ADD, ALU_SUB, ALU_AND, ALU_OR, ALU_XOR, ALU_SLL, ALU_SRL, ALU_SRA, ALU_SLT, ALU_SLTU, ALU_SGE, ALU_SGEU, ALU_SEQ, ALU_SNE,
-};
 
-SC_MODULE (ula) {
-  sc_in<sc_uint<4>> opcode;
-  sc_in<sc_uint<SIZE>> A, B;       // inputs
-  sc_out<sc_uint<SIZE>> Z;         // output
-  sc_out<bool> zero;         // zero flag
+SC_MODULE(ula)
+{
+  sc_in< sc_uint<SIZE> > a, b;
+  sc_in< sc_uint<4> > ula_op;
+  sc_out< sc_uint<SIZE> > z;
+  sc_out<bool> zero;
 
-  void proc(void);
-
-  SC_CTOR(ula) {
+  SC_CTOR(ula)
+  {
     SC_METHOD(proc);
-    sensitive << A << B << opcode;
+    sensitive << a << b << ula_op;
+    SC_METHOD(check_zero);
+    sensitive << z;
   }
+
+  void proc();
+  void check_zero();
 };
 
 #endif

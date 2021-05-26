@@ -27,6 +27,7 @@ SC_MODULE (reg_WB){
 private:
     sc_uint<SIZE> alu_out_buf, mdata_buf;
     sc_uint<5> rd_buf;
+    sc_uint<2> wb_ctrl_buf;
 };
 
 #endif

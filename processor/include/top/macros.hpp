@@ -4,6 +4,9 @@
 #define SIZE 32
 #define W (SIZE / 4)
 
+#define WSIZE 32
+#define BSIZE 4
+
 #define DATAMEMSIZE 128
 #define BASEADDR 0x2000
 #define IMMSIZE 12
@@ -17,6 +20,19 @@ typedef enum {
     AU_type = 0x17,
     I_type
 } FORMAT_RV;
+
+
+typedef enum {
+    LUI = 0x37,		AUIPC = 0x17,		// atribui 20 msbits
+    ILType = 0x03,						// Load type
+    BType = 0x63,						// branch condicional
+    JAL = 0x6F,		JALR = 0x67,		// jumps
+    StoreType = 0x23,					// store
+    ILAType = 0x13,						// logico-aritmeticas com imediato
+    RegType = 0x33,
+    ECALL = 0x73,
+    NOP = 0x00
+} OPCODES;
 
 typedef enum {
     I_add,	I_addi, I_and,  I_andi, I_auipc,
@@ -46,17 +62,6 @@ typedef enum {
 } FUNCT7;
 
 typedef enum {
-    LUI = 0x37,		AUIPC = 0x17,		// atribui 20 msbits
-    ILType = 0x03,						// Load type
-    BType = 0x63,						// branch condicional
-    JAL = 0x6F,		JALR = 0x67,		// jumps
-    StoreType = 0x23,					// store
-    ILAType = 0x13,						// logico-aritmeticas com imediato
-    RegType = 0x33,
-    ECALL = 0x73
-} OPCODES;
-
-typedef enum {
     BYTE_SIZE = 0, HALF_SIZE = 1, WORD_SIZE = 2, DOUBLE_SIZE = 3
 } WORD_SIZE_E;
 
@@ -66,5 +71,11 @@ typedef enum {
     BLT = 2,
     BGE = 3
 } FORMAT_BRANCH;
+
+typedef enum {
+    ULA_ADD, ULA_SUB, ULA_AND, ULA_OR, ULA_XOR, ULA_NOR, ULA_SLL, ULA_SRL, ULA_SRA,
+    ULA_SLT, ULA_SLTU, ULA_SGE, ULA_SGEU, ULA_SEQ, ULA_SNE
+} ULA_OPCODE;
+
 
 #endif

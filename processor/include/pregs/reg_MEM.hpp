@@ -12,7 +12,7 @@ SC_MODULE (reg_MEM){
     
 // Mem control
     sc_out< bool > rd_en, wr_en;  // 0 - disable; 1 - enable
-    sc_out< sc_uint<3> > d_size; // Bit 0: 1 - signed, 0 - unsigned / Bit 1-2: 0 - byte; 1 - half; 2 - word
+    sc_out< sc_uint<3> > d_size; // Bit 2: 1 - signed, 0 - unsigned / Bit 1-0: 0 - byte; 1 - half; 2 - word
 // WB control
     sc_out< sc_uint<2> > mem_wb_ctrl;
 
@@ -33,7 +33,7 @@ SC_MODULE (reg_MEM){
 private:
     sc_uint<SIZE> alu_out_buf, mux_alu_b_buf;
     sc_uint<5> rd_buf;
-    sc_uint<3> mem_ctrl_buf;
+    sc_uint<5> mem_ctrl_buf;
     sc_uint<2> wb_ctrl_buf;
 };
 

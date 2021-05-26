@@ -4,7 +4,13 @@
 #include <systemc.h>
 #include "top/macros.hpp"
 
-sc_signal< sc_uint<SIZE> > PC_INC;
+sc_signal< sc_uint<SIZE> > K_FOUR;
+
+sc_signal<bool> TRUE;
+sc_signal<bool> FALSE;
+sc_signal<sc_uint<SIZE> > K_ZERO;
+sc_signal<sc_uint<SIZE> > K_ONE;
+
 
 sc_signal< sc_uint<SIZE> >
         // Fetch stage
@@ -13,17 +19,14 @@ sc_signal< sc_uint<SIZE> >
         next_pc,                // output of pc adder
         pc_branch,              // output of branch adder
         ft_instruction,         // output of instruction
+
         // Decode stage
-        jump_addr,              // (PC or BREG[rs1]) + Imm32
-        id_pc,                  // pc in decode stage
-        id_next_pc,             // next instruction pc
-        id_instruction,         // instruction memory output
-        id_imm_ws,              // generated immediate
-        breg_ra,                // first breg output - a
-        breg_rb,                // second breg output - b
-        mux_dbranch_ra,         // mux output for dbranch ra
-        mux_dbranch_rb,         // mux output for dbranch ra
-        return_addr;            // return address
+        id_pc,
+        id_ra,
+        id_rb,
+        id_instruction,
+        id_imm,
+        id_next_pc;
 
 sc_signal< sc_uint<7> >
         id_ins_code;            // opcode of RV instruction
@@ -34,11 +37,8 @@ sc_signal< sc_uint<SIZE> >
         ex_ra,                  // breg a output at execution stage
         ex_rb,                  // breg b output at execution stage
         ex_imm,                 // immediate at execution stage
-        mux_forward_a,          // forward mux output and ALU mux input
-        mux_forward_b,          // forward mux output and ALU mux input
-        mux_alu_a,              // ALU input A
-        mux_alu_b,              // ALU input B
         alu_out,                // ALU output
+        ex_alu_B,               // ALU input B
         // Memory stage
         mem_alu_out,            // ALU output at memory stage
         mem_mux_alu_b,          // ALU input B at mem stage
@@ -64,23 +64,14 @@ sc_signal< sc_uint<5> >
         // Memory stage
         wb_rd;                  // rd field in memory stage
 
-sc_signal< sc_uint<2> >
-        forward_a,              // select mux forward A
-        forward_b;              // select mux forward B
-
-sc_signal< sc_uint<4> >
-        opcode_alu;             // alu opcode
 
 sc_signal< sc_uint<3> >
         ex_funct3;              // funct3 in execute stage
 
-sc_signal< sc_uint<7> >
+sc_signal< bool >
         ex_funct7;              // funct7 in execute stage   
 
 sc_signal< bool >
-        // Decode
-        sel_mux_ra_dbranch,
-        sel_mux_rb_dbranch,
         // Execute
         zero_alu;
 
@@ -88,6 +79,7 @@ sc_signal< bool >
 
         // Fetch -----------------------------------------------------------
 sc_signal< bool > sel_mux_pc;       // select pc input
+sc_signal<bool> fetch_sel_in;
 sc_signal<bool>
         wren_reg_ID,                // enable write on reg IF/ID - hazard_rv
         rst_reg_ID,                 // reset reg_ID
@@ -133,6 +125,7 @@ sc_signal< bool >
 sc_signal< sc_uint<3> >
         mem_data_size;              // Bit 0: 1 - signed, 0 - unsigned / Bit 1-2: 0 - byte; 1 - half; 2 - word
 sc_signal< bool >
+        mem_breg_wren,                 // breg write enable on MEM
         mem_rd_en,                     // 0: disable, 1: enable
         mem_wr_en,                     // 0: disable, 1: enable
         sel_mux_mem;                   // Select Mux Mem input
